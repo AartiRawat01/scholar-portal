@@ -7,15 +7,15 @@
 
 
 
-body {
+.body {
     background: #eee;
     font-family: 'Raleway', sans-serif;
     font-family: 'Roboto', sans-serif;
     font-family: 'Poppins', sans-serif;
     font-family: 'Rubik', sans-serif;
     padding: 100px 0;
-    width: 50%;
-    margin-left: 50%; 
+    /* width: 50%;
+    margin-left: 50%;  */
 
 }
 
@@ -210,15 +210,15 @@ p {
 
 
 
-body {
+.body {
     background: #eee;
     font-family: 'Raleway', sans-serif;
     font-family: 'Roboto', sans-serif;
     font-family: 'Poppins', sans-serif;
     font-family: 'Rubik', sans-serif;
     padding: 100px 0;
-    width: 50%;
-    margin-left: 50%; 
+    /* width: 50%;
+    margin-left: 50%;  */
 
 }
 
