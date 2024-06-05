@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPES Dashboard</title>
+    <style>
+        /* The left side navigation menu */
+        .left-sidebar {
+            margin: 0;
+            padding: 0;
+            width: 200px;
+            background-color: #f1f1f1;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+            top: 0;
+            left: 0;
+        }
+
+        /* Sidebar links */
+        .left-sidebar a {
+            display: block;
+            color: black;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        /* Active/current link */
+        .left-sidebar a.active {
+            background-color: #3e3cb8;
+            color: white;
+        }
+
+        /* Links on mouse-over */
+        .left-sidebar a:hover:not(.active) {
+            background-color: #0a0b0c;
+            color: white;
+        }
+
+        /* The right side navigation menu */
+        .right-sidebar {
+            margin: 0;
+            padding: 0;
+            width: 200px;
+            background-color: #f1f1f1;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+            top: 0;
+            right: 0;
+        }
+
+        /* Sidebar links */
+        .right-sidebar a {
+            display: block;
+            color: black;
+            padding: 16px;
+            text-decoration: none;
+        }
+
+        /* Active/current link */
+        .right-sidebar a.active {
+            background-color: #3e07be;
+            color: white;
+        }
+
+        /* Links on mouse-over */
+        .right-sidebar a:hover:not(.active) {
+            background-color: #0c0c0ca8;
+            color: white;
+        }
+
+        /* Page content. The value of the margin-left and margin-right properties should match the value of the sidebar's width property */
+        .content {
+            background-image: url("e:\New folder\images\upes img.jpg");
+            background-size: cover; /* Cover the entire background */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Do not repeat the background image */
+
+            margin-left: 200px;
+            margin-right: 200px;
+            padding: 16px;
+            height: 100vh; /* Full height */
+            overflow: auto; /* Enable scrolling if needed */
+        }
+
+        .content h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* On screens that are less than 700px wide, make the sidebars into topbars */
+        @media screen and (max-width: 700px) {
+            .left-sidebar, .right-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .left-sidebar a, .right-sidebar a {
+                float: left;
+            }
+            .content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+
+        /* On screens that are less than 400px, display the bars vertically, instead of horizontally */
+        @media screen and (max-width: 400px) {
+            .left-sidebar a, .right-sidebar a {
+                text-align: center;
+                float: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- The left sidebar -->
+    <div class="left-sidebar">
+        <a class="active" href="#scholar-profile" onclick="showContent('scholar-profile')">Scholar Profile</a>
+        <a href="#imageupload" onclick="showContent('imageupload')">Image Upload</a>
+        <a href="#studentdetails" onclick="showContent('studentdetails')">Student Details</a>
+        <a href="#academicdetails" onclick="showContent('academicdetails')">Academic Details</a>
+        <a href="#guardiandetails" onclick="showContent('guardiandetails')">Guardian Details</a>
+        <a href="#academicdetails" onclick="showContent('academicdetails')">Academic Details</a>
+        <a href="#address" onclick="showContent('address')">Address</a>
+        <a href="#documentupload" onclick="showContent('documentupload')">Document Upload</a>
+    </div>
+
+    <!-- Page content -->
+    <div class="content">
+        <h1>UPES Dashboard</h1>
+        <div id="content-area">
+            <!-- Working area content goes here -->
+        </div>
+    </div>
+
+    <!-- The right sidebar -->
+    <div class="right-sidebar">
+        <a class="active" href="#program-details" onclick="showContent('program-details')">Program Details</a>
+                <a href="#session" onclick="showContent('session')">Session</a>
+        <a href="#year" onclick="showContent('year')">Year</a>
+        <a href="#fellowshipstatus" onclick="showContent('fellowshipstatus')">Fellowship Status</a>
+        <a href="#Date of Joining" onclick="showContent('dateofjoining')">Date of Joining</a>
+        <a href="#part-time/full-time" onclick="showContent('part-time/full-time')">Part Time/Full Time</a>
+        <a href="#programname" onclick="showContent('programname')">Program Name</a>
+        <a href="#schoolname" onclick="showContent('schoolname')">School Name</a>
+        <a href="#supervisor" onclick="showContent('supervisor')">Supervisor</a>
+        <a href="#stageofscholar" onclick="showContent('stageofscholar')">Stage of Scholar</a>
+        <a href="#courseworkdetail" onclick="showContent('courseworkdetail')">Course Work Detail</a>
+        <a href="#synopsisdetails" onclick="showContent('synposisdetails')">Synposis Details</a>
+        <a href="#abstractdetails" onclick="showContent('abstractdetails')">Abstract Details</a>
+        <a href="#src/drc" onclick="showContent('src/drc')">SRC/Drc</a>
+        <a href="#examination" onclick="showContent('examination')">Examination</a>
+        
+
+    </div>
+
+    <script>
+        function showContent(section) {
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = '<p>Loading ' + section.replace('-', ' ') + '...</p>';
+            // Simulate content loading with a timeout
+            setTimeout(() => {
+                contentArea.innerHTML = '<p>Content for ' + section.replace('-', ' ') + '</p>';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
