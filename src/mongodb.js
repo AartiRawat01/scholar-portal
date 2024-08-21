@@ -1,27 +1,31 @@
 //const mongoose=require("mongoose")
 
-//mongoose.connect("mongodb://localhost:27017/loginSignUpForm")
-//.then(()=>{
-  //  console.log("mongodb connected");
+//mongoose.connect("mongodb://localhost:27017/scholar",{useNewUrlParser:true,useUnifiedTopology:true}) 
+
+//}).catch((err)=>{
+  //console.log(err)
 //})
 
-//.catch(()=>{console.log("failed to connect");
 
-//});
+//const Student=new mongoose.Schema({
+   // name:String,
+       // workout:Boolean,
+        //Studentid:Number,
+ //  })
 
-//const LogInSchema=new mongoose.Schema({
-    //name:{
-        //type:String,
-        //required:true
-  //  },
+//const student=  new mongoose.model("student".student);
 
-   // password:{
-       // type:String,
-       // required:true
-   // },
+//const adder=async()=>{
+
+
+//const ss= new Student({
+
+ // name:"isha",
+  //workout:true,
+  //Studentid:12334,
 //})
 
-//const collection= new moongose.model("Collection1",LogInSchema)
+ //await ss.save();
 
-//module.exports=collection
-
+//}
+//adder();

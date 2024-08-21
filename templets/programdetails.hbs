@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPES Dashboard</title>
+    <title>UPES Faculty Dashboard</title>
     <style>
+
+body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+.logo {
+    width: 120px; 
+    height: auto;
+}
+
         /* The left side navigation menu */
         .left-sidebar {
             margin: 0;
@@ -113,24 +131,31 @@
                 float: none;
             }
         }
+    
+
     </style>
 </head>
 <body>
     <!-- The left sidebar -->
     <div class="left-sidebar">
         <a class="active" href="#scholar-profile" onclick="showContent('scholar-profile')">Scholar Profile</a>
-        <a href="#imageupload" onclick="showContent('imageupload')">Image Upload</a>
-        <a href="#studentdetails" onclick="showContent('studentdetails')">Student Details</a>
-        <a href="#academicdetails" onclick="showContent('academicdetails')">Academic Details</a>
-        <a href="#guardiandetails" onclick="showContent('guardiandetails')">Guardian Details</a>
-        <a href="#academicdetails" onclick="showContent('academicdetails')">Academic Details</a>
-        <a href="#address" onclick="showContent('address')">Address</a>
-        <a href="#documentupload" onclick="showContent('documentupload')">Document Upload</a>
+
+<img id="profileImage" src="/images/images.png" width="120px" alt="Profile Image" 
+     onerror="this.onerror=null; this.src='path/to/default-image.jpg';">
+<input type="file" id="imageInput" accept="image/*">
+<a href="#status"  onclick="showContent('Status' )">Status</a>  
+          <!-- <a href="#image"  onclick="showContent('Image' )">Image</a>  ---->
+             <a href="#Basicinformation"  onclick="showContent('Basic Information' )">Basic  Information</a>  
+               <a href="#academicdetails"  onclick="showContent('academicdetails' )">Academic Details</a>  
+                 <a href="#Guardiandetails"  onclick="showContent('guardiansdetails' )">Guardians Details</a>  
+                   <a href="#Documentupload"  onclick="showContent'documentupload' )">Document Upload</a>  
+
     </div>
 
-    <!-- Page content -->
+
     <div class="content">
-        <h1>UPES Dashboard</h1>
+        <header> <b><h2>UPES  Faculty Dashboard </h2></b></header>
+         <img src="/images/logo.png" alt="Logo" class="logo">
         <div id="content-area">
             <!-- Working area content goes here -->
         </div>
@@ -139,8 +164,8 @@
     <!-- The right sidebar -->
     <div class="right-sidebar">
         <a class="active" href="#program-details" onclick="showContent('program-details')">Program Details</a>
-                <a href="#session" onclick="showContent('session')">Session</a>
-        <a href="#year" onclick="showContent('year')">Year</a>
+                <a href="#session" onclick="showContent('session ')"> Session</a>
+           <a href="#year" onclick="showContent('year')">Year</a>
         <a href="#fellowshipstatus" onclick="showContent('fellowshipstatus')">Fellowship Status</a>
         <a href="#Date of Joining" onclick="showContent('dateofjoining')">Date of Joining</a>
         <a href="#part-time/full-time" onclick="showContent('part-time/full-time')">Part Time/Full Time</a>
@@ -166,6 +191,19 @@
                 contentArea.innerHTML = '<p>Content for ' + section.replace('-', ' ') + '</p>';
             }, 1000);
         }
+
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+    const file = event.target.files[0]; 
+    if (file) {
+        const reader = new FileReader(); 
+        reader.onload = function(e) {
+            document.getElementById('profileImage').src = e.target.result; 
+        }
+        reader.readAsDataURL(file); 
+    }
+});
+
+
     </script>
 </body>
 </html>

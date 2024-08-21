@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title> Scholar Login Page</title>
      <link rel="stylesheet" href="styles.css"> 
 
     <style>
@@ -89,7 +89,7 @@ a:hover {
 }
 
 body{
-  /* Replace 'background.jpg' with the path to your image file */
+  
 
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
@@ -193,7 +193,7 @@ a:hover {
 <body>
     <div class="container">
         <form id="login-form">
-            <h2>Login</h2>
+            <h2> Scholar Login</h2>
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="xyz@gmail.com">
@@ -210,8 +210,6 @@ a:hover {
                 <a href="#" class="forgot-link">Forgot Email?</a>
             </div>
             <button type="button" id="loginsubmit">Login</button>
-    
-                {{!-- <p>Don't have an account? <a href="/changepassword">Change Password</a></p> --}}
                 
             </div>
         </form>
@@ -224,19 +222,14 @@ a:hover {
     const loginForm = document.getElementById('loginsubmit');
 
     loginForm.addEventListener('click', async function(event) {
-        event.preventDefault();
-
-     //   window.location.href = '/reginsert';
-
-
-       
+        event.preventDefault()
 
         const username = document.getElementById('email').value;
         const password = document.getElementById('password').value;
       
       console.log('hola');
         try {
-            const response = await fetch('/changepassword', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -245,6 +238,8 @@ a:hover {
             });
 
             console.log('hola');
+
+
 
             if (response.ok) {
                 // Redirect to home screen

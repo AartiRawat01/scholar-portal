@@ -15,6 +15,12 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+
+
+    background-image:url('public/images/adminimage.jpg');
+     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .login-container {
@@ -109,7 +115,7 @@ button:hover {
             </div>
             <button type="submit" id="loginsubmit">Login</button>
             <div class="forgot-password">
-                <a href="/forgot-password">Forgot Password?</a>
+                <a href="/forgotpass">Forgot Password?</a>
             </div>
         </form>
     </div>
@@ -134,7 +140,7 @@ button:hover {
             });
 
             if (response.ok) {
-                // Redirect to home screen
+                
                 window.location.href = '/enlishment';
             } else {
                 const errorData = await response.json();
