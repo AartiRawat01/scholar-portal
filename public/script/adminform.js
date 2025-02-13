@@ -1,23 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css2.0/registration.css">
+const studentId = getQueryParam('id');
+const page = getQueryParam('page').trim();
 
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+console.log('Student ID:', studentId);
+console.log('Page:', page);
+const containerdiv = document.getElementById("thecontainer");
+async function initialcall(studentId) {
+    console.log('Fetching data for studentId:', studentId);
+    const response = await fetch(`/getStudentById/${studentId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 
-    <title> Regisration Form </title>  
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
 
-</head>
-<body>
-    <div class="container">
-        <!--<form id="registrationForm" action="/upload" method="post" enctype="multipart/form-data">--->
+    const data = await response.json();
+    console.log('Response data:', data); 
+
+    return data;
+}
+
+initialcall(studentId).then(student => {
+
+    console.log('page----',page)
+
+       containerdiv.innerHTML =   `
+                         
+      
         <header>Scholar Profile</header></br>
         <img src="/images/logo.png" alt="Logo" class="logo">
-
+        <form id="editStudentForm" action="/update-student" method="POST" enctype="multipart/form-data">
         <div class="fields">
 
             <div class="input-field">
@@ -28,6 +48,7 @@
                     <option value="de-registered">De-Registered</option>
                     <option value="Deceased">Deceased</option>
                 </select></br></br>
+              
 
 
 
@@ -40,7 +61,7 @@
 
                 </div>
 
-                <form id="registrationForm" enctype="multipart/form-data">
+                <form id="editStudentForm" action="/update-student" method="POST">
                     <div class="form first">
                         <div class="details personal">
                             <span class="title">
@@ -59,111 +80,104 @@
 
                                 </div>
 
-                                <div class="input-field">
-                                    <label for="FIRSTNAME" class="required">FIRST NAME</label>
-                                    <input type="text" id="firstName" name="firstName" 
-                                        placeholder=" ENTER YOUR FIRST NAME">
+                    <div class="input-field">
+                <label for="FIRSTNAME" class="required">FIRST NAME</label>
+                      <input type="text" id="firstName" name="firstName" 
+                     placeholder=" ENTER YOUR FIRST NAME"  value="${student.firstName}">
                                 </div>
+
 
                                 <div class="input-field">
                                 <label for="MIDDLENAME">MIDDLE NAME</label>
-                                    <input type="text" id="middleName" name="middleName" placeholder="MIDDLE NAME">
+                    <input type="text" id="middleName" name="middleName" placeholder="MIDDLE NAME"   value="${student.middleName}">
 
                                 </div>
                                      
                                 <div class="input-field">
                                     <label for="LASTNAME">LAST NAME</label>
-                                    <input type="text" id="lastName" name="lastName" placeholder="LAST NAME">
+                                    <input type="text" id="lastName" name="lastName" placeholder="LAST NAME"  value="${student.lastName}" >
 
                                 </div>
 
 
                                 <div class="input-field">
                                     <label for="GENDER">GENDER</label>
-                                    <select id="gender" name="gender" required>
+                                    <select id="gender" name="gender"      value="${student.gender}"  required>
                                         <option disabled selected>Select gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value="others">Others</option>
                                     </select>
-                                    {{!-- <div class="input-field">
-                                    <label>Gender</label>
-                                    <select required>
-                                        <option disabled selected>Select gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                        <option>Others</option>
-                                    </select> --}}
                                 </div>
 
                                 <div class="input-field">
                                    <label for="STUDENTID">STUDENT ID</label>
-                                    <input type="text" id="studentId" name="studentId" placeholder="STUDENT ID">
+                                    <input type="text" id="studentId" name="studentId" placeholder="STUDENT ID"   value="${student.studentId}">
                                 </div>
 
 
                                 <div class="input-field">
                                   <label for="ADMISSIONBATCH">ADMISSION BATCH</label>
-                                    <input type="text" id="admissionBatch" name="admissionBatch"
-                                        placeholder="ADMISSION BATCH">
+                                    <input type="text"  name="admissionBatch"
+                                        placeholder="ADMISSION BATCH"   value="${student.admissionBatch}">
 
                                 </div>
 
                                 <div class="input-field">
                                      <label for="ADMISSIONDATE">ADMISSION DATE</label>
                                     <input type="text" id="admissionDate" name="admissionDate"
-                                        placeholder="ADMISSION DATE">
+                                        placeholder="ADMISSION DATE"    value="${student.admissionDate}">
                                 </div>
 
                                 <div class="input-field">
                                      <label for="APPLICATIONNO">APPLICATION NO</label>
                                     <input type="text" id="applicationNo" name="applicationNo"
-                                        placeholder="APPLICATION NUMBER">
+                                        placeholder="APPLICATION NUMBER"  value="${student.applicationNo}">
                                 </div>
 
                                 <div class="input-field">
                                     <label for="OFFICIALEMAILID" class="required">OFFICIAL EMAIL ID</label>
                                     <input type="text" id="officialEmailId" name="officialEmailId"
-                                        placeholder="OFFICIAL EMAIL ID">
+                                        placeholder="OFFICIAL EMAIL ID"  value="${student.officialEmailId}">
                                 </div>
 
                                 <div class="input-field">
                              <label for="PERSONALEMAILID" class="required">PERSONAL EMAIL ID</label>
                                     <input type="text" id="personalEmailId" name="personalEmailId"
-                                        placeholder="PERSONAL EMAIL ID">
+                                        placeholder="PERSONAL EMAIL ID"  value="${student.personalEmailId}">
                                 </div>
 
                                 <div class="input-field">
-                                   <label for="MOBILENO" class="required">MOBILE NO</label>
-                                    <input type="text" id="mobileNo" name="mobileNo" placeholder="MOBILE NO">
+                 <label for="MOBILENO" class="required">MOBILE NO</label>
+                <input type="text" id="mobileNo" name="mobileNo" placeholder="MOBILE NO"   value="${student.mobileNo}">
                                 </div>
 
                                 <div class="input-field">
                                      <label for="DATEOFBIRTH" class="required">DATE OF BIRTH</label>
-                                    <input type="text" id="dateOfBirth" name="dateOfBirth" placeholder="DATE OF BIRTH">
+                                    <input type="text" id="dateOfBirth" name="dateOfBirth" placeholder="DATE OF BIRTH"    value="${student.dateOfBirth}">
                                 </div>
 
                                 <div class="input-field">
                                      <label for="AADHARNUMBER" class="required">AADHAR NUMBER</label>
                                     <input type="text" id="aadharNumber" name="aadharNumber"
-                                        placeholder="AADHAR NUMBER">
+                                        placeholder="AADHAR NUMBER"  value="${student.aadharNumber}">
                                 </div>
 
 
                                 <div class="input-field">
                                      <label for="NATIONALITY" class="required">NATIONALITY</label>
-                                    <input type="text" id="nationality" name="nationality" placeholder="NATIONALITY">
+                                    <input type="text" id="nationality" name="nationality" placeholder="NATIONALITY"   value="${student.nationality}">
                                 </div>
 
                                 <div class="input-field">
                                     <label for="EMERGENCYCONTACTNUMBER">EMERGENCY CONTACT NUMBER</label>  
                                        <input type="text" id="emergencyContactNumber" name="emergencyContactNumber"
-                                        placeholder="EMERGENCY CONTACT NUMBER">
+                                        placeholder="EMERGENCY CONTACT NUMBER"  value="${student.emergencyContactNumber}">
                                 </div>
 
                                 <div class="input-field">
                          <label for="RELIGION" >RELIGION</label>
-                                    <select id="religion" name="religion">
+                                    <select id="religion" name="religion"   value="${student.religion}">
                                         <option value="christianity">Christianity</option>
                                         <option value="islam">Islam</option>
                                         <option value="hinduism">Hinduism</option>
@@ -185,13 +199,13 @@
 
                                 <div class="input-field">
                                       <label for="BLOODGROUP">BLOOD GROUP</label>
-                                    <input type="text" id="bloodGroup" name="bloodGroup" placeholder="BLOOD GROUP">
+                                    <input type="text" id="bloodGroup" name="bloodGroup" placeholder="BLOOD GROUP"  value="${student.bloodGroup}">
                                 </div>
 
                                 <div class="input-field">
                                       <label for="PASSPORTNUMBER">PASSPORT NUMBER</label>
                                     <input type="text" id="passportNumber" name="passportNumber"
-                                        placeholder="PASSPORT NUMBER">
+                                        placeholder="PASSPORT NUMBER"  value="${student.passportNumber}">
                                 </div>
                             </div></br></br>
 
@@ -204,45 +218,45 @@
                                 <div class="Academics Details">
                                     <span class="title">
                                 <label for="HighSChooL" class="required">HIGH SCHOOL</label>
-                                        <!---<h5><b><u>HIGH SCHOOL</u></b></h5>--->
+                                    
                                     </span>
 
                                     <div class="fields">
                                         <div class="input-field">
                                              <label for="HIGHSCHOOLNAME"> SCHOOL</label>
                                             <input type="text" id="highschoolName" name="highschoolName"
-                                                placeholder="SCHOOL NAME">
+                                                placeholder="SCHOOL NAME"   value="${student.highschoolName}">
                                         </div>
 
                                         <div class="input-field">
                                             <label for="HIGHSCHOOLBOARDNAME"> BOARD </label>
-                                            <input type="text" id="highschoolboardName" name="highschoolboardName" placeholder="BOARD NAME">
+                                            <input type="text" id="highschoolboardName" name="highschoolboardName" placeholder="BOARD NAME"  value="${student.highschoolboardName}">
                                         </div>
 
                                         <div class="input-field">
                                             <label for="HIGHSCHOOLSTREAM">  STREAM</label>
-                                            <input type="text" id="highschoolstream" name="highschoolstream" placeholder="STREAM">
+                                            <input type="text" id="highschoolstream" name="highschoolstream" placeholder="STREAM"   value="${student.highschoolstream}">
 
                                         </div>
 
                                         <div class="input-field">
                                             <label for="HIGHSCHOOLPASSINGYEAR"> PASSING YEAR</label>
                                             <input type="text" id="highschoolpassingYear" name="highschoolpassingYear"
-                                                placeholder="PASSING YEAR">
+                                         placeholder="PASSING YEAR" value="${student.highschoolpassingYear}">
 
                                         </div>
 
                                         <div class="input-field">
                                             <label for="HIGHSCHOOLSCHOOLADDRESS">  ADDRESS</label>
                                             <input type="text" id="highschoolschoolAddress" name="highschoolschoolAddress"
-                                                placeholder="SCHOOL ADDRESS">
+                                                placeholder="SCHOOL ADDRESS"   value="${student.highschoolschoolAddress }">
 
                                         </div>
 
                                      <div class="input-field">
                                             <label for="HIGHSCHOOLPERCENTAGECGPA"> PERCENTAGE/CGPA</label>
                                             <input type="text" id="highschoolpercentageCgpa" name="highschoolpercentageCgpa"
-                                                placeholder="PERCENTAGE/CGPA">
+                                                placeholder="PERCENTAGE/CGPA"   value="${student.highschoolpercentageCgpa }">
 
                                         </div>
                                     </div></br>
@@ -252,48 +266,48 @@
                                         <div class="Academics Details">
                                             <span class="title">
                                                  <label for="INTERMEDIATESCHOOL" class="required">INTERMEDIATE SCHOOL</label>
-                                               <!-- <h5><b><u>INTERMEDIATE SCHOOL</u></b></h5>--->
+
                                             </span>
 
                                             <div class="fields">
                                                 <div class="input-field">
                                                      <label for="INTERMEDIATESCHOOLNAME">SCHOOL </label>
                                                     <input type="text" id="intermediateschoolName" name="intermediateschoolName"
-                                                        placeholder="SCHOOL NAME">
+                                                        placeholder="SCHOOL NAME"    value="${student.intermediateschoolName }">
                                                 </div>
 
 
                                                 <div class="input-field">
                                          <label for="INTERMEDIATEBOARDNAME">BOARD </label>
                                                     <input type="text" id="intermediateboardName" name="intermediateboardName"
-                                                        placeholder="BOARD NAME">
+                                                        placeholder="BOARD NAME"    value="${student.intermediateboardName}"  >
 
                                                 </div>
 
                                                 <div class="input-field">
                                                     <label for="INTERMEDIATESTREAM">STREAM</label>
-                                                    <input type="text" id="intermediatestream" name="intermediatestream" placeholder="STREAM">
+                                                    <input type="text" id="intermediatestream" name="intermediatestream" placeholder="STREAM" value="${student.intermediatestream}" >
 
                                                 </div>
 
                                                 <div class="input-field">
                                                     <label for="INTERMEDIATEPASSINGYEAR">PASSING YEAR</label>
                                                     <input type="text" id="intermediatepassingyear" name="intermediatepassingyear"
-                                                        placeholder="PASSING YEAR">
+                                                        placeholder="PASSING YEAR"  value="${student.intermediatepassingyear}">
 
                                                 </div>
 
                                                 <div class="input-field">
                                                      <label for="INTERMEDIATESCHOOLADDRESS">SCHOOL ADDRESS</label>
                                                     <input type="text" id="intermediateschoolAddress" name="intermediateschoolAddress"
-                                                        placeholder="SCHOOL ADDRESS">
+                                                        placeholder="SCHOOL ADDRESS"  value="${student.intermediateschoolAddress}">
 
                                                 </div>
 
                                                 <div class="input-field">
                                                      <label for="INTERMEDIATEPERCENTAGECGPA">PERCENTAGE/CGPA</label>
                                                     <input type="text" id="intermediatepercentageCgpa" name="intermediatepercentageCgpa"
-                                                        placeholder="PERCENTAGE/CGPA">
+                                                        placeholder="PERCENTAGE/CGPA"  value="${student.intermediatepercentageCgpa}">
                                                 </div>
                                             </div></br>
 
@@ -302,57 +316,49 @@
                                                         <div class="Academics Details">
                                                             <span class="title">
                                                  <label for="GRADUATION" class="required">GRADUATION</label>
-                                                                <!---<h5><b><u>GRADUATION</u></b></h5>--->
+                                                              
                                                             </span>
 
-                                                            {{!-- <div class="fields">
-                                                                <div class="input-field">
-                                                                    <label for="GRADUATIONCOLLAGEUNIVERSITYNAME">COLLAGE/UNIVERSITY NAME</label>
-                                                                    <input type="text" id="graduationCollageUniversityName"
-                                                                        name=" graduationCollageUniversityName"
-                                                                        placeholder="COLLAGE/UNIVERSITY NAME">
-                                                                </div>
-                                                               --}}
-
+                                                            
                                                  <div class="fields">
                                                 <div class="input-field">
                                                      <label for="GRADUATIONCOLLAGEUNIVERSITYNAME">COLLAGE/UNIVERSITY  </label>
                                                     <input type="text" id="GraduationcollageUniversityName" name="GraduationcollageUniversityName"
-                                                        placeholder="COLLAGE/UNIVERSITY NAME">
+                                                        placeholder="COLLAGE/UNIVERSITY NAME"   value="${student.GraduationcollageUniversityName}">
                                                 </div>
 
 
                                                                  <div class="input-field">
                                                                     <label for="GRADUATIONCOURSENAME">COURSE </label>
                                                                     <input type="text" id="graduationcourseName" name="graduationcourseName"
-                                                                        placeholder="COURSE NAME">
+                                                                        placeholder="COURSE NAME"   value="${student.graduationcourseName}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                     <label for="GRADUATIONSPECIALIZATION">SPECIALIZATION</label>
                                                                     <input type="text" id="graduationspecilatization"
                                                                         name="graduationspecilatization"
-                                                                        placeholder="SPECIALIZATION">
+                                                                        placeholder="SPECIALIZATION"  value="${student.graduationspecilatization}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                     <label for="GRADUATIONPASSINGYEAR">PASSING YEAR</label>
                                                                     <input type="text" id="graduationpassingyear"
-                                                                        name="graduationpassingyear" placeholder="PASSING YEAR">
+                                                                        name="graduationpassingyear" placeholder="PASSING YEAR" value="${student.graduationpassingyear}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                     <label for="GRADUATIONCOLLAGEADDRESS"> ADDRESS</label>
                                                                     <input type="text" id="graduationcollageaddress"
                                                                         name="graduationcollageaddress"
-                                                                        placeholder="COLLAGE ADDRESS">
+                                                                        placeholder="COLLAGE ADDRESS"  value="${student.graduationcollageaddress}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                     <label for="GRADUATIONPERCENTAGECGPA">PERCENTAGE/CGPA</label>
                                                                     <input type="text" id="graduationPercentagecgpa"
                                                                         name="graduationPercentagecgpa"
-                                                                        placeholder="PERCENTAGE/CGPA">
+                                                                        placeholder="PERCENTAGE/CGPA" value="${student.graduationPercentagecgpa}">
                                                                 </div>
                                                             </div></br></br>
 
@@ -361,7 +367,7 @@
                                                         <div class="Academics Details">
                                                             <span class="title">
                                                                 <label for="POSTGRADUATION" class="required"> POST GRADUATION</label>
-                                                                <!---<h5><b><u>POST GRADUATION</u></b></h5>--->
+                                                
                                                             </span>
 
                                                             <div class="fields">
@@ -369,41 +375,41 @@
                                                                     <label for="POSTGRADUATIONCOLLAGEUNIVERSITYNAME">COLLAGE/UNIVERSITY</label>
                                                                     <input type="text" id="postgraduationUniversityName" 
                                                                         name="postgraduationUniversityName "
-                                                                        placeholder="COLLAGE/UNIVERSITY NAME">
+                                                                        placeholder="COLLAGE/UNIVERSITY NAME"  value="${student.postgraduationUniversityName}">
                                                                 </div>
 
 
                                                                  <div class="input-field">
                                                                      <label for="POSTGRADUATIONCOURSENAME">COURSE </label>
                                                                     <input type="text" id="postgraduationcoursename" name="postgraduationcoursename"
-                                                                        placeholder="COURSE NAME">
+                                                                        placeholder="COURSE NAME"  value="${student.postgraduationcoursename}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                      <label for="POSTGRADUATIONSPECIALIZATION">SPECIALIZATION</label>
                                                                     <input type="text" id="postgraduationspecialization"
                                                                         name="postgraduationspecialization"
-                                                                        placeholder="SPECIALIZATION">
+                                                                        placeholder="SPECIALIZATION"  value="${student.postgraduationspecialization}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                      <label for="POSTGRADUATIONPASSINGYEAR">PASSING YEAR</label>
                                                                     <input type="text" id="postgraduationpassingyear"
-                                                                        name="postgraduationpassingyear" placeholder="PASSING YEAR">
+                                                                        name="postgraduationpassingyear" placeholder="PASSING YEAR"  value="${student.postgraduationpassingyear}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                      <label for="POSTGRADUATIONCOLLAGEADDRESS"> ADDRESS</label> 
                                                                     <input type="text" id="postgraduationcollageAddress"
                                                                         name="postgraduationcollageAddress"
-                                                                        placeholder="COLLAGE ADDRESS">
+                                                                        placeholder="COLLAGE ADDRESS" value="${student.postgraduationcollageAddress}">
                                                                 </div>
 
                                                                 <div class="input-field">
                                                                      <label for="POSTGRADUATIONPERCENTAGECGPA">PERCENTAGE/CGPA</label>
                                                                     <input type="text" id="postgraduationPercentagecgpa"
                                                                         name="postgraduationPercentagecgpa"
-                                                                        placeholder="PERCENTAGE/CGPA">
+                                                                        placeholder="PERCENTAGE/CGPA"  value="${student.postgraduationPercentagecgpa}">
                                                                 </div>
                                                             </div>  </br></br>
 
@@ -411,7 +417,7 @@
                                                                 <div class="Guardian Details">
                                                                     <span class="title">
                                                                  <label for="guardiansdetails "class="required"><h2><b>GUARDIANS DETAILS</b></h2></label>
-                                                                       <!--- <h3><b><u>GUARDIANS DETAILS</u></b></h3>-->
+                                                        
                                                                     </span>
 
                                                                     <div class="fields">
@@ -419,28 +425,28 @@
                                                                               <label for="FATHERNAME">FATHER NAME</label>
                                                                             <input type="text" id="fatherName"
                                                                                 name="fatherName"
-                                                                                placeholder="FATHER NAME">
+                                                                                placeholder="FATHER NAME"  value="${student.fatherName}">
                                                                         </div>
 
                                                                         <div class="input-field">
                                                                               <label for="FATHEREMAILID">EMAIL ID</label>
-                                                                            <input type="text" id="fatherEmailId"
+                                                                            <input type="text" id=""
                                                                                 name="fatherEmailId"
-                                                                                placeholder="FATHER EMAIL ID">
+                                                                                placeholder="FATHER EMAIL ID"  value="${student.fatherEmailId}">
                                                                         </div>
 
                                                                         <div class="input-field">
                                                                               <label for="FATHERPHONENO">PHONE NO</label>
                                                                             <input type="text" id="fatherPhoneNo"
                                                                                 name="fatherPhoneNo"
-                                                                                placeholder="FATHER PHONE NO">
+                                                                                placeholder="FATHER PHONE NO"  value="${student.fatherPhoneNo}">
                                                                         </div>
 
                                                                         <div class="input-field">
                                                                               <label for="FATHERPROFESSION">FATHER PROFESSION</label>
                                                                             <input type="text" id="fatherProfession"
                                                                                 name="fatherProfession"
-                                                                                placeholder="FATHER PROFESSION">
+                                                                                placeholder="FATHER PROFESSION"  value="${student.fatherProfession}">
                                                                         </div>
                                                                     </div>  
 
@@ -455,7 +461,7 @@
                                                                                       <label for="MOTHERNAME" class="required">MOTHER NAME</label>
                                                                                     <input type="text" id="motherName"
                                                                                         name="motherName"
-                                                                                        placeholder="MOTHER NAME">
+                                                                                        placeholder="MOTHER NAME" value="${student.motherName}">
 
                                                                                 </div>
 
@@ -463,7 +469,7 @@
                                                                                       <label for="MOTHEREMAIL">EMAIL ID</label>
                                                                                     <input type="text" id="motherEmail"
                                                                                         name="motherEmail"
-                                                                                        placeholder="MOTHER EMAIL">
+                                                                                        placeholder="MOTHER EMAIL"  value="${student.motherEmail}">
 
                                                                                 </div>
 
@@ -472,7 +478,7 @@
                                                                                     <input type="text"
                                                                                         id="motherPhoneNo"  
                                                                                         name="motherPhoneNo"
-                                                                                        placeholder="MOTHER PHONE NO">
+                                                                                        placeholder="MOTHER PHONE NO"  value="${student.motherPhoneNo}">
 
 
                                                                                 </div>
@@ -483,7 +489,7 @@
                                                                                     <input type="text"
                                                                                         id="motherProfession"
                                                                                         name="motherProfession"
-                                                                                        placeholder="MOTHER PROFESSION">
+                                                                                        placeholder="MOTHER PROFESSION" value="${student.motherProfession}">
                                                                                 </div>
                                                                             </div></br></br>
 
@@ -492,19 +498,10 @@
                                                                                 <div class="Address Details">
                                                                                     <span class="title">
                                                                          <label for="ADDRESSDETAILS"><h2><b>PRESENT ADDRESS</b></h2></label>
-                                                                                       <!--- <h3><b><u>ADDRESS
-                                                                                                    DETAILS</u></b></h3>--->
+                        
                                                                                     </span>
-{{!-- 
-                                                                                    <div class="fields">
-                                                                                        <div class="input-field">
-                                                                                <label for="PRESENTADDRESS">ADDRESS</label>
-                                                                                            <input type="text"
-                                                                                                id="presentAddress"
-                                                                                                name="presentAddress"
-                                                                                                placeholder="ENTER YOUR PRESENT ADDRESS">
-                                                                                        </div> --}}
-                                                                                               
+
+                                                                               
 
                                                                                                 <div class="fields">
                                                                                         <div class="input-field">
@@ -512,7 +509,7 @@
                                                                                             <input type="text"
                                                                                                 id="presentstreet"
                                                                                                 name="presentstreet"
-                                                                                                placeholder=" ENTER YOUR STREET">
+                                                                                                placeholder=" ENTER YOUR STREET"  value="${student.presentstreet}">
 
                                                                                         </div>
 
@@ -521,7 +518,7 @@
                                                                                             <input type="text"
                                                                                                 id="presentLandmark"
                                                                                                 name="presentLandmark"
-                                                                                                placeholder="ENTER LANDMARK">
+                                                                                                placeholder="ENTER LANDMARK"  value="${student.presentLandmark}">
 
                                                                                         </div>
 
@@ -530,14 +527,14 @@
                                                                                             <input type="text"
                                                                                                 id="presentpincode"
                                                                                                 name="presentpincode"
-                                                                                                placeholder="ENTER PINCODE">
+                                                                                                placeholder="ENTER PINCODE"   value="${student.presentpincode}">
 
                                                                                         </div>
 
                                                                                         <div class="input-field">
                                                                                               <label for="PRESENTCOUNTRY"> COUNTRY</label>
                                                                                             <select id="presentCountry"
-                                                                                                name="presentCountry">
+                                                                                                name="presentCountry" value="${student.presentCountry}">
                                                                                                 <option
                                                                                                     value="Afghanistan">
                                                                                                     Afghanistan</option>
@@ -1535,12 +1532,11 @@
 
                                                                                         <div class="input-field">
                                                                              
-                                                                                          <!---<input id="presentstate" name="presentstate"
-                                                                                                placeholder="STATE">--->
+                            
                                                                                                 <label for="PRESENTSTATE"> STATE</label>
                                                                                                 
                                                                                             <select id="presentstate"
-                                                                                                name="presentstate">
+                                                                                                name="presentstate"   value="${student.presentstate}">
                                                                                                 <option value="AP">
                                                                                                     Andhra Pradesh
                                                                                                 </option>
@@ -1629,7 +1625,7 @@
                                                                                             <label for="CITY"> Select
                                                                                                 your City</label>
                                                                                             <select id="presentcity"
-                                                                                                name="presentcity">
+                                                                                                name="presentcity"  value="${student.presentcity}">
                                                                                                 <option value="">Select
                                                                                                     City</option>
                                                                                                 <option
@@ -2874,8 +2870,7 @@
                                                                                 <div class="Address Details">
                                                                                     <span class="title">
                                                                          <label for="ADDRESSDETAILS"><h2><b>PERMANENT ADDRESS</b></h2></label>
-                                                                                       <!--- <h3><b><u>ADDRESS
-                                                                                                    DETAILS</u></b></h3>--->
+                                                                                 
                                                                                     </span>
                                                                                      
                                                                                             
@@ -2889,7 +2884,7 @@
                                                                                             <input type="text"
                                                                                                 id="permanentstreet"
                                                                                                 name="permanentstreet"
-                                                                                                placeholder="STREET">
+                                                                                                placeholder="STREET"   value="${student.permanentstreet}">
 
                                                                                         </div>
 
@@ -2898,7 +2893,7 @@
                                                                                             <input type="text"
                                                                                                 id="permanentlandmark"
                                                                                                 name="permanentlandmark"
-                                                                                                placeholder="LANDMARK">
+                                                                                                placeholder="LANDMARK"   value="${student.permanentlandmark}">
 
                                                                                         </div>
 
@@ -2907,7 +2902,7 @@
                                                                                             <input type="text"
                                                                                                 id="permanentpincode"
                                                                                                 name="permanentpincode"
-                                                                                                placeholder="PINCODE">
+                                                                                                placeholder="PINCODE"    value="${student.permanentpincode}">
 
                                                                                         </div>
 
@@ -2916,7 +2911,7 @@
                                                                                             <input type="text"
                                                                                                 id="permanentcountry"
                                                                                                 name="permanentcountry"
-                                                                                                placeholder="COUNTRY">
+                                                                                                placeholder="COUNTRY"  value="${student.permanentcountry}">
 
                                                                                         </div>
 
@@ -2924,7 +2919,7 @@
                                                                                               <label for="PERMANENTSTATE"> STATE</label>
                                                                                             <input type="text"
                                                                                                 id="permanentstate" name="permanentstate"
-                                                                                                placeholder="STATE">
+                                                                                                placeholder="STATE"    value="${student.permanentstate}">
 
                                                                                         </div>
 
@@ -2932,12 +2927,16 @@
                                                                                               <label for="PERMANENTCITY"> CITY</label>
                                                                                             <input type="text" id="permanentcity"
                                                                                                 name="permanentcity"
-                                                                                                placeholder="CITY">
+                                                                                                placeholder="CITY"   value="${student.permanentcity}">
 
                                                                                         </div>
                                                                                     </div></br>
-                                                                                      
+                                                                                    </br>
+                                                                                            <div> 
 
+
+
+                                                                                            
                                                                                      <div class="form first">
                                                                                         <div class="Documents Upload">
                                                                                             <span class="title">
@@ -2953,7 +2952,7 @@
                                                                                                     id="highschoolMarksheet"
                                                                                                     name="highschoolMarksheet"
                                                                                                     accept=".pdf,.jpg,.png"
-                                                                                                    required>
+                                                                                                    required     value="${student.highschoolMarksheet}">
 
                                                                                                 <label
                                                                                                     for="highSchoolMarkSheet"
@@ -2967,7 +2966,8 @@
                                                                                                     id="intermediateSchoolMarksheet"
                                                                                                     name="intermediateSchoolMarksheet"
                                                                                                     accept=".pdf,.jpg,.png"
-                                                                                                    required>
+                                                                                                    required value="${student.intermediateSchoolMarksheet}">
+
 
                                                                                                 <label
                                                                                                     for="IntermediateSchoolMarkSheet"
@@ -2982,7 +2982,7 @@
                                                                                                     id="graduationMarksheet"
                                                                                                     name="graduationMarksheet"
                                                                                                     accept=".pdf,.jpg,.png"
-                                                                                                    required>
+                                                                                                    required      value="${student.graduationMarksheet}">
 
 
                                                                                                 <label
@@ -2997,7 +2997,7 @@
                                                                                                     id="graduationDegree"
                                                                                                     name="graduationDegree"
                                                                                                     accept=".pdf,.jpg,.png"
-                                                                                                    required>
+                                                                                                    required    value="${student.graduationDegree}">
 
 
                                                                                                 <label
@@ -3007,12 +3007,12 @@
                                                                                             </div>
                                                                                             <br>
 
-                                                                                            <div>
+                                                                                           <!------- <div>
                                                                                                 <input type="file"
                                                                                                     id="postgraduationMarksheet"
                                                                                                     name="postgraduationMarksheet"
                                                                                                     accept=".pdf,.jpg,.png"
-                                                                                                    required>
+                                                                                                    required       value="${student.postgraduationMarksheet}">
 
 
                                                                                                 <label
@@ -3029,7 +3029,7 @@
                                                                                                     id="postgraduationDegree"
                                                                                                     name="postgraduationDegree"
                                                                                                     accept=".pdf,.jpg,.png"
-                                                                                                    required>
+                                                                                                    required   value="${student.postgraduationDegree}">
 
 
                                                                                                 <label
@@ -3047,7 +3047,7 @@
                                                                                                     name="postgraduationMigration"
                                                                                                     id="postgraduationMigration"
                                                                                                     accept=".pdf,.jpg,.png"
-                                                                                                    required>
+                                                                                                    required    value="${student.postgraduationMigration}">
                                                                                                 <label
                                                                                                     for="POST GRADUATION MIGRATION"
                                                                                                     class="required">POST
@@ -3055,14 +3055,67 @@
                                                                                                     MIGRATION</label>
                                                                                             </div>
                                                                                             </br>
-                                                                                            <div> 
+                                                                                            <div> -------->
 
-                                                                                                <input type="submit"  
-                                                                                                    value="Submit All Documents"
-                                                                                                    class="submit-button">
-                                                                                            </div> 
-                                                                                           </div>
-                                                                                           </div>
-       <script src="/script/registration.js"></script>
-</body>
-</html>
+
+                                                                              ${ page.replace(/'/g, '') === 'edit' ? `<button type="submit">Update</button>`:`<div></div>` }
+                                                                                             
+                                                                                            `;
+
+                                                                                        }).catch(error => {
+                                                                                            console.error('Error fetching student data:', error);
+                                                                                        });
+
+
+// const toggleExportBtn = document.getElementById('toggleExport');
+//         const exportOptions = document.getElementById('exportOptions');
+
+//         toggleExportBtn.addEventListener('click', () => {
+//             exportOptions.classList.toggle('show');
+//         });
+        
+//         document.getElementById('toPDF').addEventListener('click', () => {
+//             const { jsPDF } = window.jspdf;
+//             const doc = new jsPDF();
+//             doc.text('Student Registration Data', 10, 10);
+            
+            
+//             const table = document.getElementById('studentTable');
+//             const rows = Array.from(table.querySelectorAll('tr'));
+
+//             let y = 20;
+//             rows.forEach(row => {
+//                 const cells = Array.from(row.querySelectorAll('th, td'));
+//                 let text = cells.map(cell => cell.innerText).join(', ');
+//                 doc.text(text, 10, y);
+//                 y += 10;
+//             });
+
+//             doc.save('student_data.pdf');
+//         });
+
+        
+//         document.getElementById('toCSV').addEventListener('click', () => {
+//             let csvContent = '';
+//             const table = document.getElementById('studentTable');
+//             const rows = Array.from(table.querySelectorAll('tr'));
+
+//             rows.forEach(row => {
+//                 const cells = Array.from(row.querySelectorAll('th, td'));
+//                 let rowText = cells.map(cell => cell.innerText).join(',');
+//                 csvContent += rowText + '\n';
+//             });
+
+//             const blob = new Blob([csvContent], { type: 'text/csv' });
+//             saveAs(blob, 'student_data.csv');
+//         });
+
+//         // Export to Excel using SheetJS (xlsx)
+//         document.getElementById('toEXCEL').addEventListener('click', () => {
+//             const table = document.getElementById('studentTable');
+//             const worksheet = XLSX.utils.table_to_sheet(table);
+//             const workbook = XLSX.utils.book_new();
+//             XLSX.utils.book_append_sheet(workbook, worksheet, 'Student Data');
+//             XLSX.writeFile(workbook, 'student_data.xlsx');
+//         });
+

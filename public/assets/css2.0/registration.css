@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Data</title>
-   <link rel="stylesheet" href="/assets/css2.0/adminform.css">
-
-    <style>
-        
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
@@ -30,7 +20,7 @@ body {
     align-items: center;
     font-family: 'Roboto', sans-serif;
     min-height: auto;
-    background: #1693A5;
+    background:#1693A5;
 }
 
 header {
@@ -333,17 +323,3 @@ input[type="submit"] {
     color: red;
     margin-left: 4px;
 }
-
-    </style>
-
-</head>
-<body>
-    <div class="container" id="thecontainer"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="/script/adminform.js"></script>
-    
-</body>
-
-</html>

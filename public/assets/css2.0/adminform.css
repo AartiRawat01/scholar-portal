@@ -1,0 +1,132 @@
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    margin-top: 30px;
+}
+
+
+nav {
+    background-color: #333;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.export-container {
+    position: relative;
+    margin: 0;
+    text-align: left;
+}
+
+.export-btn {
+    background-color: gray;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px;
+}
+
+.export-btn:hover {
+    background-color: grey;
+}
+
+.export-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    text-align: left;
+    width: 200px;
+}
+
+.export-options.show {
+    display: flex;
+}
+
+.export-options label {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.export-options label:hover {
+    background-color: #f9f9f9;
+}
+
+.export-options label:last-child {
+    border-bottom: none;
+}
+
+.export-options img {
+    width: 20px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+
+.table-container {
+    width: 100%;
+    margin: 30px auto;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: grey;
+    color: #fff;
+}
+
+th, td {
+    padding: 10px 15px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+    min-width: 120px;
+}
+
+th {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+@media only screen and (max-width: 768px) {
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}

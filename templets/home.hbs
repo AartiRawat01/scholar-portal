@@ -1,314 +1,48 @@
-
-     
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password Pop-up</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-}
+    <link rel="stylesheet" href="/assets/css2.0/home.css">
 
-.container {
-    width: 500px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-h2 {
-    text-align: center;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-a {
-    text-decoration: none;
-    color: #007bff;
-}
-
-a:hover {
-    text-decoration: underline;
-    color: #0056b3;
-}
-
-.right-shift {
-    float: right;
-  }
-
- /* style.css */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
   
-  .container {
-    max-width: 800px;
-    margin: 20px auto;
-  }
-  
-  .box {
-    background-color: #f0f0f0;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 5px;
-  }
-  
-  .box h3 {
-    margin-bottom: 10px;
-  }
-  
-  /* ===== Google Font Import - Poppins ===== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-body{
-    min-height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #060607;
-}
-
-.required.field::before{
-    content: '*';
-    color:red;
-    margin-right: 5px;
-    }
-    
-.container{
-    position: relative;
-    max-width: 900px;
-    min-height: auto;
-    width: 100%;
-    border-radius: 6px;
-    padding: 30px;
-    margin: 0 15px;
-    height: auto;
-    background-color: #fff;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-}
-.container header{
-    position: relative;
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-}
-.container header::before{
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    height: 3px;
-    width: 27px;
-    border-radius: 8px;
-    background-color: #db3a6a;
-}
-.container form{
-    position: relative;
-    margin-top: 16px;
-    min-height:3500px;
-    background-color: #fff;
-    overflow: hidden;
-}
-.container form .form{
-    position: absolute;
-    background-color: #fff;
-    transition: 0.3s ease;
-}
-.container form .form.second{
-    
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(100%);
-    min-height: auto;
-
-}
-form.secActive .form.second{
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(0);
-
-}
-form.secActive .form.first{
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-100%);
-}
-.container form .title{
-    display: flex;
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    margin: 6px 0;
-    color: #333;
-}
-
-
-.container form .fields{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-
-    
-}
-
-
-
-
-form .fields .input-field{
-    display: flex;
-    width: calc(100% / 3 - 15px);
-    flex-direction: column;
-   
-    margin: 4px 0;
-
-}
-.input-field label{
-    font-size: 12px;
-    font-weight: 500;
-    color: #2e2e2e;
-}
-.input-field input, select{
-    outline: none;
-    font-size: 14px;
-    font-weight: 400;
-    color: #333;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-    padding: 0 15px;
-    height: 42px;
-    margin: 8px 0;
-}
-.input-field input :focus,
-.input-field select:focus{
-    box-shadow: 0 3px 6px rgba(0,0,0,0.13);
-}
-.input-field select,
-.input-field input[type="date"]{
-    color: #707070;
-}
-.input-field input[type="date"]:valid{
-    color: #333;
-}
-
-body {
-    font-family: Arial, sans-serif;
-}
-
-
-
-
-input[type="file"] {
-    margin-bottom: 10px;
-}
-
-input[type="submit"] {
-    display: block;
-    margin: 0 auto;
-}
-
-/* Required field styling */
-.required::before {
-    content: '*';
-    color: red;
-    margin-right: 5px;}
-
-
-
-@media (max-width: 750px) {
-    .container form{
-        overflow-y: scroll;
-    }
-    .container form::state(webkit-scrollbar){
-       display: none;
-    }
-    form .fields .input-field{
-        width: calc(100% / 2 - 15px);
-    }
-}
-
-@media (max-width: 550px) {
-    form .fields .input-field{
-        width: 100%;
-    }
-}
-  
- </style>  
 </head>
 <body>
 <div class="container">
-        <h2>Welcome To UPES Dashboard</h2>
+      <img src="/images/logo.png" alt="Logo" class="logo" width="150px">
+        <h2>WELCOME TO UPES DASHBOARD</h2>
 
         <div class="box">
             <a href="/registration">
-            <h3>Scholar Profile</h3>
-            <!-- Content for Profile & Scholar -->
+            <h3>SCHOLAR PROFILE</h3>
+        
             <p>Your profile information goes here.</p>
             </a>
         </div>
         <div class="box">
             <a href="programdetails">
-            <h3>Program Details</h3>
+            <h3>PROGRAM DETAILS</h3>
             
             <p>Your program details go here.</p>
 
             </a>
         </div>
+
+         <div class="box">
+            <a href="paperpublication">
+            <h3>PAPER PUBLICATION</h3>
+            
+            <p>Your paper publication goes here.</p>
+
+            </a>
     </div>
 
+  
 
-
-
-    <script>
-       
-    </script>
+    <script src="/script/home.js"></script>
 </body>
 </html>
 
-</body>
-</html>
+

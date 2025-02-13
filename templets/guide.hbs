@@ -1,0 +1,392 @@
+ {{!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Supervisor Dashboard</title>
+  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
+    <style>
+     
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Supervisor Welcome Message */
+        .supervisor-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.5); }
+            100% { text-shadow: 2px 2px 15px rgba(255, 204, 0, 0.9); }
+        }
+
+        /* Table Styling */
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffcc00;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+        }
+
+        /* Button Styling */
+        .action-buttons button {
+            margin: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .view-btn { background-color: #4CAF50; color: white; }
+        .edit-btn { background-color: #f39c12; color: white; }
+    </style>
+</head>
+<body>
+
+    <!-- Supervisor Name -->
+    <div id="supervisorContainer">
+        <h2 class="supervisor-name" id="supervisorName">Welcome, Supervisor!</h2>
+        <div id="exportButtons"></div> <!-- Export buttons will be placed here -->
+    </div>
+
+    <!-- Student Table -->
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Stage</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const queryString = window.location.search;
+
+const urlParams = new URLSearchParams(queryString);
+const email = urlParams.get('email');
+        async function loadStudentData() {
+    try {
+     
+      const response = await fetch(`/guide?email=${email}`);
+      const data = await response.json();
+      console.log('Fetched data:', data);
+
+      let tableContent = "";
+
+      if (data.students.length > 0) {
+        document.getElementById("supervisorName").textContent = `Welcome, ${data.students[0].supervisorName}!`;
+      }
+
+      data.students.forEach(student => {
+        tableContent += `
+          <tr>
+            <td>${student.name}</td>
+            <td>${student.studentId}</td>
+            <td>${student.stage}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="view-btn" data-id="${student.studentId}">View</button> 
+                <button class="edit-btn" data-id="${student.studentId}">Edit</button>
+              </div>
+            </td>
+          </tr>`;
+      });
+
+      document.querySelector("#studentTable tbody").innerHTML = tableContent;
+
+  
+      let table = $('#studentTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: ['excelHtml5', 'pdfHtml5', 'print'],
+        initComplete: function () {
+          $('#exportButtons').html($('.dt-buttons')); 
+        }
+      });
+      $(document).on('click', '.view-btn', function () {
+        const studentId = $(this).data('id');
+        window.location.href = `/programdetail2?id=${studentId}&page=view`;
+      });
+
+      $(document).on('click', '.edit-btn', function () {
+        const studentId = $(this).data('id');
+        window.location.href = `/programdetail2?id=${studentId}&page=edit`;
+      });
+    } catch (error) {
+      console.error('Error fetching student data:', error);
+    }
+  }
+
+
+  loadStudentData();
+    </script>
+
+</body>
+</html>   --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Supervisor Dashboard</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
+    <style>
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #2C5364, #203A43, #0F2027);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+  
+        .supervisor-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.5); }
+            100% { text-shadow: 2px 2px 15px rgba(255, 204, 0, 0.9); }
+        }
+
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffcc00;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+        }
+
+        .action-buttons button {
+            margin: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .view-btn { background-color: #4CAF50; color: white; }
+        .edit-btn { background-color: #f39c12; color: white; }
+
+        #logoutContainer {
+            margin-top: 250px;
+            margin-left: 1020px;
+        }
+        #logoutButton {
+            background-color: red;
+            color: white;
+            border: 2px solid red;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="supervisorContainer">
+        <h2 class="supervisor-name" id="supervisorName">Welcome, Supervisor!</h2>
+        <div id="exportButtons"></div>
+    </div>
+
+    
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Stage</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+ 
+    <div id="logoutContainer">
+        <button id="logoutButton">Logout</button>
+    </div>
+
+    <script>
+       
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const email = urlParams.get('email');
+
+        async function loadStudentData() {
+            try {
+             
+                const response = await fetch(`/guide?email=${encodeURIComponent(email)}`);
+                const data = await response.json();
+                console.log('Fetched data:', data);
+
+                let tableContent = "";
+
+              
+                if (data.students.length > 0) {
+                    document.getElementById("supervisorName").textContent = `Welcome, ${data.students[0].supervisorName || "Supervisor"}!`;
+                } else {
+                    document.getElementById("supervisorName").textContent = `Welcome, ${email}!`;
+                }
+
+               
+                data.students.forEach(student => {
+                    tableContent += `
+                        <tr>
+                            <td>${student.name}</td>
+                            <td>${student.studentId}</td>
+                            <td>${student.stage}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="view-btn" data-id="${student.studentId}">View</button> 
+                                    <button class="edit-btn" data-id="${student.studentId}">Edit</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                });
+
+                document.querySelector("#studentTable tbody").innerHTML = tableContent;
+
+               
+                let table = $('#studentTable').DataTable({
+                    dom: 'Bfrtip',
+                    buttons: ['excelHtml5', 'pdfHtml5', 'print'],
+                    initComplete: function () {
+                        $('#exportButtons').html($('.dt-buttons')); 
+                    }
+                });
+
+                
+                $(document).on('click', '.view-btn', function () {
+                    const studentId = $(this).data('id');
+                    window.location.href = `/programdetail2?id=${studentId}&page=view`;
+                });
+
+                $(document).on('click', '.edit-btn', function () {
+                    const studentId = $(this).data('id');
+                    window.location.href = `/programdetail2?id=${studentId}&page=edit`;
+                });
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+            }
+        }
+
+        loadStudentData();
+
+   
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            
+            sessionStorage.clear();
+            localStorage.clear();
+
+            window.location.href = "/guideview";
+        });
+    </script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,184 @@
+{{!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+             background-color:#1693A5;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+        .login-container .form-control {
+            margin-bottom: 15px;
+            height: 45px;
+        }
+        .login-container .btn-primary {
+            width: 100%;
+            height: 45px;
+            font-size: 16px;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+    <img src="/images/logo.png" alt="Logo" class="logo" width="150px">
+        <h2>  Welcome supervisor </h2>
+        <form id="loginForm">
+            <input type="email" id="email" class="form-control" placeholder="Email" required>
+            <input type="password" id="password" class="form-control" placeholder="Password" required>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <p id="errorMessage" class="error-message"></p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value; 
+
+            console.log('userdata=====>>>>',email, password)
+
+            const response = await fetch('http://localhost:5000/guideview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                window.location.href =  `/guidenavigate?email=${encodeURIComponent(email)}`; 
+            } else {
+                document.getElementById('errorMessage').textContent = result.message;
+            }
+        });
+    </script>
+</body>
+</html>  --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #1693A5;
+      font-family: Arial, sans-serif;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+   
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: green;
+      background: linear-gradient(45deg, green, #ff9900);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: green, 0 0 20px,green;
+      animation: neon 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes neon {
+      from {
+        text-shadow:green ,green;
+      }
+      to {
+        text-shadow: green,green;
+      }
+    }
+    .login-container .form-control {
+      margin-bottom: 15px;
+      height: 45px;
+    }
+    .login-container .btn-primary {
+      width: 100%;
+      height: 45px;
+      font-size: 16px;
+    }
+    .error-message {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="/images/logo.png" alt="Logo" class="logo" width="150px" />
+    <h2>Welcome Supervisor!</h2>
+    <form id="loginForm">
+      <input type="email" id="email" class="form-control" placeholder="Email" required />
+      <input type="password" id="password" class="form-control" placeholder="Password" required />
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p id="errorMessage" class="error-message"></p>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      console.log('userdata=====>>>>', email, password);
+
+      const response = await fetch('http://localhost:5000/guideview', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+    
+        window.location.href = `/guidenavigate?email=${encodeURIComponent(email)}`;
+      } else {
+        document.getElementById('errorMessage').textContent = result.message;
+      }
+    });
+  </script>
+</body>
+</html>

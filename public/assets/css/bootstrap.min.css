@@ -82,7 +82,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
+  background-color: white;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -179,9 +179,9 @@ address {
   line-height: inherit;
 }
 ol,
-ul {
+/* ul {
   padding-left: 2rem;
-}
+} */
 dl,
 ol,
 ul {
@@ -531,7 +531,7 @@ progress {
   margin-top: -1rem;
   margin-bottom: 1rem;
   font-size: 0.875em;
-  color: #6c757d;
+  color: white;
 }
 .blockquote-footer::before {
   content: "— ";
@@ -557,7 +557,7 @@ progress {
 }
 .figure-caption {
   font-size: 0.875em;
-  color: #6c757d;
+  color: white;
 }
 .container,
 .container-fluid,
@@ -566,33 +566,34 @@ progress {
 .container-sm,
 .container-xl,
 .container-xxl {
+  margin-top: 30px;
   width: 100%;
   padding-right: var(--bs-gutter-x, 0.75rem);
   padding-left: var(--bs-gutter-x, 0.75rem);
   margin-right: auto;
   margin-left: auto;
   position: relative;
-  left: 200px;
+  left: 0px;
 }
-@media (min-width: 576px) {
+@media (min-width: 1500px) {
   .container,
   .container-sm {
-    max-width: 540px;
+    max-width: 1010px;
   }
 }
-@media (min-width: 768px) {
+@media (min-width: 1500px) {
   .container,
   .container-md,
   .container-sm {
-    max-width: 720px;
+    max-width: 1010px;
   }
 }
-@media (min-width: 992px) {
+@media (min-width: 2000px) {
   .container,
   .container-lg,
   .container-md,
   .container-sm {
-    max-width: 960px;
+    max-width: 1012px;
   }
 }
 @media (min-width: 1200px) {
@@ -615,6 +616,7 @@ progress {
   }
 }
 .row {
+  background-color: white ;
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
   display: flex;
@@ -795,7 +797,7 @@ progress {
 .gy-5 {
   --bs-gutter-y: 3rem;
 }
-@media (min-width: 576px) {
+@media (min-width: 2500px) {
   .col-sm {
     flex: 1 0 0%;
   }
@@ -2312,7 +2314,7 @@ textarea.form-control-lg {
   pointer-events: none;
 }
 .form-range:disabled::-webkit-slider-thumb {
-  background-color: #adb5bd;
+  background-color: #eef1f5;
 }
 .form-range:disabled::-moz-range-thumb {
   background-color: #adb5bd;
@@ -3338,6 +3340,7 @@ fieldset:disabled .btn {
 .dropstart,
 .dropup {
   position: relative;
+  width: 150px;
 }
 .dropdown-toggle {
   white-space: nowrap;

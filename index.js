@@ -9,43 +9,15 @@ const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator');
 const cors = require('cors');
 const multer = require('multer')
-
-
-
-
-//const User = require('../models/user');
-
-
-
-// const collection=require("./src/mongodb")
-//const { adder } = require("./mongodb"); // Import the adder function from mongodb.js
-
-//app.get("/add-student", async (req, res) => {
- // try {
-   // await adder();
-   // res.send("Student added successfully");
-  //} catch (err) {
-   // res.status(500).send("Error adding student");
-  //}
-//});
-
-//app.listen(port, () => {
- // console.log(`Server running at http://localhost:${port}/`);
-//});
-
-
-// Middleware setup
-
-//.use(bodyParser.urlencoded({ extended: true }));
-//app.use(bodyParser.json());
-
-// Setup multer for file uploads
-
+//const upload = multer();
+const passport = require("passport");
+const passportLocalMongoose 
+    = require("passport-local-mongoose");
 app.use(express.static( __dirname));
 const mongoose = require('mongoose');
+const session = require('express-session');
 
-
-mongoose.connect("mongodb://127.0.0.1:27017/scholar", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb://127.0.0.1:27017/scholar", { useNewUrlParser: true, useUnifiedTopology: true  ,   serverSelectionTimeoutMS: 30000, })
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -57,8 +29,13 @@ mongoose.connect("mongodb://127.0.0.1:27017/scholar", { useNewUrlParser: true, u
         name: String,
         workout: Boolean,
         Studentid: Number,
+        schoolName: String,
+        programName: String,
+        academicYear: String,
+        status: Boolean
     });
 
+   
     const Student = mongoose.model("student", studentSchema);
   const corsOptions = {
     origin: "",
@@ -66,386 +43,471 @@ mongoose.connect("mongodb://127.0.0.1:27017/scholar", { useNewUrlParser: true, u
     credentials: true,
     optionsSuccessStatus: 204,
   };
+
+  app.get('/students', async (req, res) => {
+    const { schoolName, programName, academicYear } = req.query;
+    const query = {};
+
+    if (schoolName) query.schoolName = schoolName;
+    if (programName) query.programName = programName;
+    if (academicYear) query.academicYear = academicYear;
+
+    try {
+        const students = await Student.find(query);
+        res.json(students);
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+
 const adder = async () => {
     console.log('hola');
-    const ss = new Student({
-        name: "isha",
-        workout: true,
-        Studentid: 12334,
+    const students = [
+        {
+            name: "Isha",
+            workout: true,
+            Studentid: 12345,
+            schoolName: "School of Advanced Engineering",
+            programName: "PhD (Chemistry)",
+            academicYear: "2023-2024",
+            active: true
+        },
+        {
+            name: "Aarti",
+            workout: true,
+            Studentid: 123345,
+            schoolName: "School of Health Sciences",
+            programName: "PhD (Biotechnology)",
+            academicYear: "2022-2023",
+            active: true
+        }
+    ];
 
-        name: "aarti",
-        workout: true,
-        Studentid: 123564,
-    });
-
-  
-
-    await ss.save();
+    await Student.insertMany(students);
     console.log("Student saved!");
 };
 
 // adder();
 // adder()
 
-const mydataSchema = new mongoose.Schema({
-    status: String,
-    profileUpload: Buffer,
-    title: String,
-    firstname: String,
-    middlename: String,
-    lastname: String,
-    gender: String,
-    studentid: Number,
-    admissionbatch: String,
-    admissiondate: Date,
-    applicationno: Number,
-    officialemailid: String,
-    personalemailid: String,
-    mobileno: String,
-    dateofbirth: Date,
-    aadharnumber: String,
-    nationality: String,
-    emergencycontactnumber: String,
-    religion: String,
-    bloodgroup: String,
-    passportnumber: String,
-    highSchoolDetails: {
-        name: String,
-        boardName: String,
-        stream: String,
-        passingyear: String,
-        address: String,
-        percentagecgpa: String,
-        
-    },
-    intermediateSchoolDetails: {
-        name: String,
-        boardName: String,
-        stream: String,
-        passingyear: String,
-        address: String,
-       
-    },
-    graduationDetails: {
-        collegeuniversityname: String,
-        coursename: String,
-        specialization: String,
-        passingyear: String,
-        collegeaddress: String,
-        percentagecgpa: String,
-      
-    },
-    postGraduationDetails: {
-        collegeuniversityname: String,
-        courseName: String,
-        specialization: String,
-        passingYear: String,
-        collegeaddress: String,
-        percentagecgpa: String,
-       
-    },
-    fatherDetails: {
-        name: String,
-        emailid: String,
-        phoneno: String,
-        profession: String
-    },
-    motherDetails: {
-        name: String,
-        email: String,
-        phoneno: String,
-        profession: String
-    },
-    presentAddress: {
-        address: String,
-        street: String,
-        landmark: String,
-        pincode: String,
-        country: String,
-        state: String,
-        city: String
-    },
-    permanentAddress: {
-        address: String,
-        street: String,
-        landmark: String,
-        pincode: String,
-        country: String,
-        state: String,
-        city: String
-    },
+app.get('/mainpage', (req, res) => {
+    res.render('mainpage');
+  });
 
-    Documentupload:{
-        highschoolmarkSheet:Buffer,
-        intermediateschoolmarkSheet:Buffer,
-        graduationmarksheet:Buffer,
-        graduationdegree:Buffer,
-        postgraduationmarkSheet:Buffer,
-        postgraduationdegree:Buffer,
-        postgraduationmigration:Buffer,
-    },
-    SubmitAllDocuments: { type: Boolean, default: false }
+
+app.get('/adminform',(req,res)=> { 
+    res.render('adminform');
+
 });
-const MyData = mongoose.model("MyData", mydataSchema);
-const corsoptions = {
-    origin: "",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    optionsSuccessStatus: 204,
-  };
 
-
-  app.post('/registration', async (req, res) => {
-      try {
-          const data = req.body;
-  
-          // Validate required fields
-          const  {
-              //  status,
-              //  profileUpload,
-                title = '',
-                firstname = '',
-                middlename = '',
-                lastname = '',
-                gender = '',
-                studentid = '',
-                Admissionbatch = '',
-                admissiondate = '',
-                applicationno = '',
-                officialemailid = '',
-                personalemailid = '',
-                mobileno = '',
-                dateofbirth = '',
-                aadharnumber = '',
-                nationality = '',
-                emergencycontactnumber = '',
-                religion = '',
-                bloodgroup = '',
-                Passportnumber = '',
-                highSchoolDetails: {
-                    name: highschoolName = '',
-                    boardName: highSchoolboardName = '',
-                    stream: highSchoolstream = '',
-                    passingYear: highSchoolpassingyear = '',
-                    address: highschooladdress = '',
-                    percentageCgpa: highSchoolPercentagecgpa = '',
-                },
-                intermediateSchoolDetails: {
-                    name: intermediateschoolName = '',
-                    boardName: intermediateSchoolboardName = '',
-                    stream: intermediateSchoolstream = '',
-                    passingYear: intermediateSchoolpassingyear = '',
-                    address: intermediateschooladdress = '',
-                    percentageCgpa: intermediateSchoolpercentagecgpa = '',
-                },
-                graduationDetails: {
-                    collegeUniversityName: graduationcollegeuniversityname = '',
-                    courseName: graduationcoursename = '',
-                    specialization: graduationspecialization = '',
-                    passingYear: graduationpassingyear = '',
-                    collegeAddress: graduationcollegeaddress = '',
-                    percentageCgpa: graduationPercentagecgpa = '',
-                },
-                postGraduationDetails: {
-                    collegeUniversityName: postGraduationcollegeuniversityname = '',
-                    courseName: postGraduationcoursename = '',
-                    specialization: postGraduationspecialization = '',
-                    passingYear: postGraduationpassingyear = '',
-                    collegeAddress: postGraduationcollegeaddress = '',
-                    percentageCgpa: postGraduationPercentagecgpa = '',
-                },
-                fatherDetails: {
-                    name: fathername = '',
-                    emailId: fatheremailid = '',
-                    phoneNo: fatherphoneno = '',
-                    profession: fatherprofession = '',
-                },
-                motherDetails: {
-                    name: mothername ='',
-                    emailId: motheremail= '',
-                    phoneNo: motherphoneno= '',
-                    profession: motherprofession = '',
-                },
-                presentAddress: {
-                    address: presentaddress = '',
-                    street: presentstreet = '',
-                    landmark: presentlandmark = '',
-                    pincode: presentpincode = '',
-                    country: presentcountry = '',
-                    state: presentstate = '',
-                    city: presentcity = '',
-                },
-                permanentAddress: {
-                    address: permanentaddress = '',
-                    street: permanentstreet = '',
-                    landmark: permanentlandmark = '',
-                    pincode: permanentpincode = '',
-                    country: permanentcountry = '',
-                    state: permanentstate = '',
-                    city: permanentcity = '',
-                },
-                documentuploads: {
-                    highschoolmarkSheet = '',
-                    intermediateschoolmarksheet = '',
-                    graduationmarksheet = '',
-                    graduationdegree = '',
-                    postgraduationmarksheet='',
-                    postgraduationdegree = '',
-                    postgraduationmigration = '',
-                },
-                SubmitAllDocuments
-            } = req.body;
-            
-        
-            
-        
-if (  !title || !firstName ||  !middleName || !lastName || !gender || !studentid || !Admissionbatch || !admissiondate || 
-    !applicationno || !officialemailid || !personalemailid || !mobileno || !dateofbirth || !aadharnumber||
-    !nationality || !emergencycontactnumber || !religion || !bloodgroup || !Passportnumber ||
-    !highschoolName || !highSchoolboardName || !highSchoolstream || !highSchoolpassingyear || !highschooladdress || !highSchoolPercentagecgpa ||
-    !intermediateschoolName || !intermediateSchoolboardName || !intermediateSchoolstream || !intermediateSchoolpassingyear || !intermediateschooladdress || !intermediateSchoolpercentagecgpa ||
-    !graduationcollegeuniversityname || !graduationcoursename || !graduationspecialization || !graduationpassingyear || !graduationcollegeaddress || !graduationPercentagecgpa ||
-    !postGraduationcollegeuniversityname || !postGraduationcoursename || !postGraduationspecialization || !postGraduationpassingyear || !postGraduationcollegeaddress || !postGraduationPercentagecgpa ||
-    !fathername || !fatheremailid || !fatherphoneno || !fatherprofession ||!mothername || !motheremail || !motherphoneno || !motherprofession ||
-    !presentaddress || !presentstreet || !presentlandmark || !presentpincode || !presentcountry || !presentstate || !presentcity ||
-    !permanentaddress || !permanentstreet || !permanentlandmark || !permanentpincode || !permanentcountry || !permanentstate || !permanentcity || !highschoolmarkSheet || !intermediateschoolmarksheet || !graduationmarksheet ||  !graduationdegree   || !postgraduationmarksheet|| !postgraduationdegree || !postgraduationmigration
-) {
-    return res.status(400).send({ message: 'Missing required fields' });
-}
-      
-        const existingUser = await mydata.findOne({ email });
-        if (existingUser) {
-            return res.status(409).send({ message: 'Email already registered' });
-        }
-
-
-        const newUser = new MyData({
-           //  status,
-              //  profileUpload,
-              title,
-              firstname ,
-              middlename ,
-              lastname ,
-              gender,
-              studentid,
-              Admissionbatch,
-              admissiondate ,
-              applicationno ,
-              officialemailid ,
-              personalemailid ,
-              mobileno ,
-              dateofbirth ,
-              aadharnumber ,
-              nationality,
-              emergencycontactnumber ,
-              religion ,
-              bloodgroup ,
-              Passportnumber ,
-              highSchoolDetails: {
-                  name: highschoolName ,
-                  boardName: highSchoolboardName ,
-                  stream: highSchoolstream ,
-                  passingYear: highSchoolpassingyear ,
-                  address: highschooladdress ,
-                  percentageCgpa: highSchoolPercentagecgpa ,
-              },
-              intermediateSchoolDetails: {
-                  name: intermediateschoolName ,
-                  boardName: intermediateSchoolboardName ,
-                  stream: intermediateSchoolstream ,
-                  passingYear: intermediateSchoolpassingyear ,
-                  address: intermediateschooladdress ,
-                  percentageCgpa: intermediateSchoolpercentagecgpa ,
-              },
-              graduationDetails: {
-                  collegeUniversityName: graduationcollegeuniversityname ,
-                  courseName: graduationcoursename ,
-                  specialization: graduationspecialization,
-                  passingYear: graduationpassingyear ,
-                  collegeAddress: graduationcollegeaddress ,
-                  percentageCgpa: graduationPercentagecgpa ,
-              },
-              postGraduationDetails: {
-                  collegeUniversityName: postGraduationcollegeuniversityname ,
-                  courseName: postGraduationcoursename ,
-                  specialization: postGraduationspecialization ,
-                  passingYear: postGraduationpassingyear,
-                  collegeAddress: postGraduationcollegeaddress ,
-                  percentageCgpa: postGraduationPercentagecgpa ,
-              },
-              fatherDetails: {
-                  name: fathername ,
-                  emailId: fatheremailid ,
-                  phoneNo: fatherphoneno ,
-                  profession: fatherprofession ,
-              },
-              motherDetails: {
-                  name: mothername ,
-                  emailId: motheremail,
-                  phoneNo: motherphoneno,
-                  profession: motherprofession ,
-              },
-              presentAddress: {
-                  address: presentaddress ,
-                  street: presentstreet ,
-                  landmark: presentlandmark ,
-                  pincode: presentpincode ,
-                  country: presentcountry ,
-                  state: presentstate ,
-                  city: presentcity ,
-              },
-              permanentAddress: {
-                  address: permanentaddress ,
-                  street: permanentstreet ,
-                  landmark: permanentlandmark ,
-                  pincode: permanentpincode,
-                  country: permanentcountry,
-                  state: permanentstate ,
-                  city: permanentcity ,
-              },
-              documentuploads: {
-                  highschoolmarkSheet ,
-                  intermediateschoolmarksheet ,
-                  graduationmarksheet ,
-                  graduationdegree,
-                  postgraduationmarksheet,
-                  postgraduationdegree ,
-                  postgraduationmigration ,
-              },
-              SubmitAllDocuments
-        });
-
-      
-    
-        
-        await newUser.save();
-        res.status(200).send({ message: 'Registration successful' });
+app.get('/studentData', async (req, res) => {
+    try {
+        const students = await Registration.find();  
+        res.json(students);
     } catch (error) {
-        console.error('Error during registration:', error);
-        res.status(500).send({ message: 'Internal Server Error' });
+        res.status(500).json({ error: 'Error fetching student data' });
     }
 });
 
 
 
-const tempelatePath=path.join(__dirname,'templets');
-const publicPath = path.join(__dirname, 'public');
-const bodyParser = require('body-parser');
-const { builtinModules } = require("module");
-// const authRoutes = require('./routes/auth');
 
 
+app.get('/getStudentById/:studentId', async (req, res) => {
+    const  studentId  =  req.params.studentId;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// app.use('/auth', authRoutes);
+    try {
+        const student = await Registration.findOne({ studentId: studentId });
+        if (student) {
 
+            console.log('data------------',student)
+            res.json(student);
+        } else {
+            res.status(404).json({ error: 'Student not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching student:', error);
+        res.status(500).json({ error: 'Server error' });
+    }; 
+});
 
-
-
+app.get('/view-student/:id', async (req, res) => {
+    try {
+      const student = await Registration.findById(req.params.id);
+      if (!student) {
+        return res.status(404).send('Student not found');
+      }
+      res.render('view-student', { student });
+    } catch (err) {
+      res.status(500).send('Error retrieving student data');
+    }
+  });
+  
 app.use(express.json());
+//   app.post('/registration', async (req, res) => {
+//       try {
+//         const formObject = req.body;
+
+//         console.log('hoal------------',formObject);
+
+
+//       }
+//       catch(e){
+//         console.log('data---',e);
+//       }
+
+//     });
+
+    app.post('/registration',  async (req, res)  => {
+        try {
+          const registrationData = new Registration(req.body); 
+          await registrationData.save(); 
+          res.status(201).send({ message: 'Registration successful' });
+        } catch (error) {
+          res.status(500).send({ message: 'Error saving registration data', error });
+        }
+      });
+
+  
+    
+
+const registrationSchema = new mongoose.Schema({
+    title: String,
+    firstName: String,
+    middleName: String,
+    lastName: String,
+    gender: String,
+    studentId: String,
+    admissionBatch: String,
+    admissionDate: String,
+    applicationNo: String,
+    officialEmailId: String,
+    personalEmailId: String,
+    mobileNo: String,
+    dateOfBirth: String,
+    aadharNumber: String,
+    nationality: String,
+    emergencyContactNumber: String,
+    religion: String,
+    bloodGroup: String,
+    passportNumber: String,
+    highschoolName: String,
+    highschoolboardName: String,
+    highschoolstream: String,
+    highschoolpassingYear: String,
+    highschoolschoolAddress: String,
+    highschoolpercentageCgpa: String,
+    intermediateschoolName:String,
+    intermediateboardName:String,
+    intermediatestream:String,
+    intermediatepassingyear:String,
+    intermediateschoolAddress:String,
+    intermediatepercentageCgpa:String,
+    GraduationcollageUniversityName: String, 
+    graduationcourseName: String,
+    graduationspecilatization: String,
+    graduationpassingyear:String,
+   graduationcollageaddress: String,
+    graduationPercentagecgpa:String,
+    postgraduationUniversityName:String,
+    postgraduationcoursename:String,
+    postgraduationspecialization:String,
+    postgraduationpassingyear:String,
+    postgraduationcollageAddress:String,
+    postgraduationPercentagecgpa:String,
+    fatherName: String,
+     fatherEmailId: String,
+     fatherPhoneNo: String,
+     fatherProfession: String,
+    motherName: String,
+     motherEmail: String,
+     motherPhoneNo: String,
+     motherProfession: String,
+     presentAddress: String,
+     presentstreet: String,
+     presentLandmark:String,
+     presentpincode:String,
+     presentCountry:String,
+     presentstate:String,
+     presentcity:String,
+     permanentaddress:String,
+     permanentstreet:String,
+     permanentlandmark:String,
+     permanentpincode:String,
+     permanentcountry:String,
+    permanentstate:String,
+    permanentcity:String,
+    highschoolMarksheet: Object,
+   intermediateSchoolMarksheet: Object,
+     graduationMarksheet: Object,
+     graduationDegree: Object,
+     postgraduationMarksheet: Object,
+    postgraduationDegree: Object,
+     postgraduationMigration: Object,
+
+
+});
+
+  
+  const Registration = mongoose.model('Registration', registrationSchema);
+  module.exports = Registration;
+
+
+
+
+  app.get('/registrationform2/:id', async (req, res) => {
+    try {
+        const studentId = req.params.id;
+        console.log('Fetching student with ID:', studentId); 
+        const student = await Registration.findById(studentId);
+
+        if (!student) {
+            console.log('Student not found');
+            return res.status(404).send('Student not found');
+        }
+
+        console.log('Student found:', student); 
+        res.render('registrationform2', { student });
+    } catch (error) {
+        console.error('Error fetching student data:', error);
+        res.status(500).send('Error fetching student data');
+    }
+});
+
+
+  app.post('/update-student/:id', async (req, res) => {
+    try {
+        const studentId = req.params.id; 
+        const updatedData = req.body;
+
+        await Registration.findByIdAndUpdate(studentId, updatedData, { new: true }); 
+
+        res.redirect('/home');
+    } catch (error) {
+        console.error('Error updating student:', error);
+        res.status(500).send('Error updating student');
+    }
+});
+///////////////////////////////////////////////////////////////
+
+  const PhDSchema = new mongoose.Schema({
+    profileImage: String,   
+    studentId:String,    
+    session: String,           
+    year: Number,               
+    fellowship: String,        
+    dateOfJoining: Date,          
+    partTimeFullTime: String,   
+    programName: String,          
+    schoolName: String,          
+    supervisor: String,        
+    scholarStage: String,         
+    srcDrC: String,             
+    examination: String         
+});
+
+const PhD = mongoose.model("PhD", PhDSchema);
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); 
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname); }
+});
+
+const upload = multer({ storage: storage });
+app.post('/programdetails', upload.single('profileImage'), async (req, res) => {
+    try {
+        const newPhD = new PhD({
+            profileImage: req.file ? req.file.path : '',
+            studentId:req.body.studentId,
+            session: req.body.session,
+            year: req.body.year,
+            fellowship: req.body.fellowship,
+            dateOfJoining: req.body.dateOfJoining,
+            partTimeFullTime: req.body.partTimeFullTime,
+            programName: req.body.programName,
+            schoolName: req.body.schoolName,
+            supervisor: req.body.supervisor,
+            scholarStage: req.body.scholarStage,
+            srcDrC: req.body.srcDrC,
+            examination: req.body.examination
+        });
+
+        await newPhD.save();
+        res.json({ success: true, message: "Scholar data saved successfully!" });
+    } catch (error) {
+        console.error("Error saving PhD data:", error);
+        res.status(500).json({ success: false, message: "Error saving scholar data" });
+    }
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+const student2Schema = new mongoose.Schema({
+    studentId: String,
+   session: String,
+    supervisor: String,
+});
+
+const corsoptions = {
+    origin: "*", 
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
+
+const students2Schema = new mongoose.Schema({
+    studentId: String,
+    session: String,
+    supervisor: String,
+});
+const Corsoptions = {
+    origin: "*", 
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
+
+const student2 = mongoose.model("student2", students2Schema);
+
+
+app.get('/students2', async (req, res) => {
+    const { session } = req.query;
+    const query = session ? { session } : {};
+
+    try {
+        const students2 = await student2.find(query);  
+        res.json(students2);
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+const GuideSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    firsttime: { type: Boolean, default: true },
+});
+
+const Student3Schema = new mongoose.Schema({
+    name: { type: String, required: true },
+    stage: { type: String, required: true },
+    studentId: { type: String, required: true, unique: true },
+    supervisor: { type: String, required: true } ,
+});
+
+const Guide = mongoose.model('Guide', GuideSchema);
+const Student3 = mongoose.model('Student3', Student3Schema);
+
+// module.exports = { Guide, Student3 };
+
+app.use(cors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204
+}));
+
+
+app.post('/guideview', async (req, res) => {
+    const { email, password } = req.body; 
+
+    console.log('Login Attempt:', email, password);
+
+    try {
+        const user = await Guide.findOne({ email });
+
+        if (user && password === user.password) {
+            // Find students linked to this supervisor's email
+            const students = await Student3.find({ supervisor: email })
+            if (students.length > 0) {
+                res.json({ 
+                    success: true, 
+                    message: 'Login successful',
+                    supervisorName: students.supervisorName, 
+                    students: students 
+                });
+            } else {
+                res.json({ 
+                    success: true, 
+                    message: 'Login successful, but no students found',
+                    supervisorName: "Unknown",
+                    students: []
+                });
+            }
+        } else {
+            res.json({ success: false, message: 'Invalid email or password' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Server error', error: err.message });
+    }
+});
+
+
+app.get('/guidenavigate', async (req, res) => {
+    try {
+        res.render('guide');
+
+        // const students = await Student3.find(); // Fetch all students
+        // res.json({ students });
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+app.get('/guide', async (req, res) => {
+    try {
+        const email = req.query.email;
+     
+        const students = await Student3.find({ supervisor: email }); // Fetch all students
+        res.json({ students });
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+//   app.get('/registrationform2/:id', async (req, res) => {
+//     try {
+//         const studentId = req.params.id;
+//         const student = await Registration.findById(studentId);
+  
+//         if (!student) {
+//             console.log('Student not found');
+//             return res.status(404).send('Student not found');
+//         }
+
+//         console.log('Student found:', student); // Add this line for debugging
+//         res.render('registrationform2', { student });
+//     } catch (error) {
+//         console.error('Error fetching student data:', error); // Add this line for debugging
+//         res.status(500).send('Error fetching student data');
+//     }
+//});
+
+
 app.set("view engine","hbs");
-app.set("views",tempelatePath);
+//app.set("views",tempelatePath);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -468,16 +530,15 @@ app.get("/",(req,res)=>{
 
 app.get("/scholarlogin",(req,res)=>{
 res.render('scholarlogin');
-
-
 });
 
-
+app.get("/programtable",(req,res)=>{
+    res.render('programtable');
+    });
+    
 
 app.get("/adminlogin",(req,res)=>{
-    res.render('adminlogin');
-    
-    
+    res.render('adminlogin')  
     });
 
 
@@ -486,66 +547,90 @@ app.get('/changepassword',(req,res)=>{
 });
 
 
+app.get('/login',(req,res)=>{
+    res.render('login');
+  });
 
-// Define Schema
-const PupilsSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    hasChangedPassword: { type: Boolean, default: false },
-    hasAccessedChangePasswordPage: { type: Boolean, default: false }
+
+  const tempelatePath = path.join(__dirname, 'templets')
+  const publicPath = path.join(__dirname, '../public')
+  console.log(publicPath);
+  
+  app.set('view engine', 'hbs')
+  app.set('views', tempelatePath)
+  app.use(express.static(publicPath))
+ 
+
+
+
+  const logInSchema=new mongoose.Schema({
+name: String,
+password: String,
+firsttime: Boolean 
 });
 
-const Pupils = mongoose.model('Pupils', PupilsSchema);
+const LogInCollection=new mongoose.model('LogInCollection',logInSchema)
+
+module.exports=LogInCollection
+app.use(express.json()); 
+
 
 app.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { username, password } = req.body;
+        console.log('Request body:', req.body);
 
-        const pupil = await Pupils.findOne({ email});
-        if (!pupil) {
-            return res.status(404).send({ message: 'Pupil not found' });
+        const user = await LogInCollection.findOne({ name: username });
+        console.log('Fetched user:', user);
+        if (!user) {
+            return res.status(404).send("No data found");
         }
-
-        const match = await bcrypt.compare(password, pupil.password);
-        if (!match) {
-            return res.status(401).send({ message: 'Invalid credentials' });
+        if (user.password === password) {
+            const isFirstTime = user.firsttime; 
+            console.log('First time login status:', isFirstTime);
+            return res.status(200).json({ "firsttime": isFirstTime });
+        } else {
+            return res.status(400).send("Incorrect password");
         }
-
-        res.status(200).send({ message: 'Login successful' });
     } catch (error) {
-        console.error('Error logging in:', error);
-        res.status(500).send({ message: 'Server error' });
+        console.error('Server error:', error);
+        return res.status(500).send("Internal server error");
     }
 });
-fetch('http://localhost:5000/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: 'aarti@gmail.com', password: '123456' })
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));
 
 
-// app.get('/register',(req,res)=>{
-//     res.render('home');
-//   });
+app.post('/changepassword', async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
 
-//app.post('/changepassword',(req,res)=>{
+        mongoose.set('useFindAndModify', true);
+        console.log('data----',email,newPassword);
+
+       
+        const userExists = await LogInCollection.findOne({ name: email });
+console.log('User exists:', userExists);
+if (!userExists) {
+    return res.status(404).json({ message: 'User not found' });
+}
+        const result = await LogInCollection.findOneAndUpdate(
+            { name: email },
+            { $set: { password: newPassword, firsttime: false } },
+            { new: true }
+        );
+
+        console.log('data5454----',result)
+            
+                    if (result) {
+                        return res.status(200).json({ message: 'Password updated successfully' });
+                    } else {
+                        return res.status(404).json({ message: 'User not found' });
+                    }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ message: 'Server error' });
+    }
+});
     
-    // res.status(200).send({ message: 'Login successful' });
-    
-   // const { username, password } = req.body;
-     
-    //if (username === user.username && password === user.password) {
-        //console.log('hola>>>>>');
-       // res.status(200).send({ message: 'Login successful' });
-    //} else {
-       // res.status(401).send({ message: 'Invalid username or password' });
-   // }
-//});
-
-
 
 app.get('/home',(req,res)=>{
 
@@ -564,19 +649,6 @@ app.get('/OTP',(req,res)=>{
      res.render('otp');
  
  })
-//app.post('/home',(req,res)=>{
-    
-    // res.status(200).send({ message: 'Login successful' });
-    
-  //  const { newpass, confirmpass } = req.body;
-     
-   // if (newpass === confirm.nepasss && confirmpass === confirm.confirmpass) {
-      //  console.log('hola>>>>>');
-       // res.status(200).send({ message: 'Login successful' });
-   // } else {
-      //  res.status(401).send({ message: 'Invalid username or password' });
-   //// }
-//});
 
 app.get('/registration',(req,res)=>{
     
@@ -589,28 +661,17 @@ app.get('/programdetails',(req,res)=>{
  });
 
 
-//const multer = require('multer');
+ app.get('/guideview',(req,res)=>{
+    
+    res.render('guideview')
+ });
 
 
-//const storage = multer.diskStorage({
-   // destination: function(req, file, cb) {
-//cb(null, 'uploads/');
-   // },
-   // filename: function(req, file, cb) {
-    //    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-   // }
-//});
-
-//const upload = multer({
-  //  storage: storage,
-   // limits: { fileSize: 10000000 }, 
-    //fileFilter: function(req, file, cb) {
-   //     checkFileType(file, cb);
-  //  }
-//}).fields([
-   // { name: 'highSchoolMarkSheet', maxCount: 1 },
-//]);
-
+ app.get('/registrationform2',(req,res)=>{
+    
+    res.render('registrationform2')
+ });
+ 
 
 function checkFileType(file, cb) {
     
@@ -663,18 +724,33 @@ app.get('/enlishment',(req,res)=>{
 
 });
 
+app.get('/paperpublication',(req,res)=>{
+
+    res.render('paperpublication');
+
+});
+
+
+
+
+
+app.get('/guide',(req,res)=>{
+
+    res.render('guide');
+
+});
+
 app.get('/adminform',(req,res)=>{
 
     res.render('adminform');
 
 });
-//app.get('/forgot-password',(req,res)=>{
 
-    //res.render('forgotpass');
+app.get('/programdetail2',(req,res)=>{
 
-//});
+    res.render('programdetail2');
 
-
+});
 
 
 const AdminSchema = new mongoose.Schema({
@@ -718,49 +794,7 @@ app.post('/enlishment', async (req, res) => {
 
 const router = express.Router();
 
-// Generate and send OTP
 
-
-// router.post('/forgot-password', async (req, res) => {
-//   const { email } = req.body;
-//   const user = await User.findOne({ email });
-
-//   if (!user) {
-//     return res.status(404).send('User not found');
-//   }
-
-//   const otp = crypto.randomBytes(3).toString('hex');
-//   const otpExpiration = Date.now() + 3600000; // 1 hour
-
-//   user.otp = otp;
-//   user.otpExpiration = otpExpiration;
-
-//   await user.save();
-
-//   const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//       user: 'BhartiSingh@gmail.com',
-//       pass: 'Bharti12345',
-//     },
-//   });
-
-//   const mailOptions = {
-//     from: 'BhartiSingh@gmail.com',
-//     to: user.email,
-//     subject: 'Password Reset OTP',
-//     text: `Your OTP is ${otp}. It will expire in 1 hour.`,
-//   };
-
-//   transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) {
-//       return res.status(500).send(error.toString());
-//     }
-//     res.status(200).send('OTP sent to your email');
-//   });
-// });
-
-// Verify OTP and reset password
 router.post('/reset-password', async (req, res) => {
   const { email, otp, newPassword } = req.body;
   const user = await User.findOne({ email });
@@ -784,13 +818,8 @@ router.post('/reset-password', async (req, res) => {
 
 module.exports = router;
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
-
-
-
-
-
 
 
 const otpSchema = new mongoose.Schema({
@@ -992,9 +1021,86 @@ app.post('/verify', async (req, res) => {
 
 
 
+const publicationSchema = new mongoose.Schema({
+    papers: [String],
+    journals: [String],
+    publicationDate: Date,
+    createdAt: { type: Date, default: Date.now }
+});
+
+const Publication = mongoose.model('Publication', publicationSchema);
+
+
+
+
+
+// File Upload Configuration
+const Storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const Upload = multer({ Storage });
+
+// app.post('/submit', upload.fields([
+//     { name: 'paper', maxCount: 5 },
+//     { name: 'journal', maxCount: 5 }
+// ]), async (req, res) => {
+//     try {
+//         const paperFiles = req.files['paper']?.map(file => file.path) || [];
+//         const journalFiles = req.files['journal']?.map(file => file.path) || [];
+//         const publicationDate = new Date(req.body.date);
+
+//         const newPublication = new Publication({
+//             papers: paperFiles,
+//             journals: journalFiles,
+//             publicationDate
+//         });
+
+//         await newPublication.save();
+//         res.status(201).json({ message: 'Publication saved successfully' });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
+app.post('/submit', upload.fields([
+    { name: 'paper', maxCount: 5 },
+    { name: 'journal', maxCount: 5 }
+]), async (req, res) => {
+    try {
+        console.log('Uploaded files:', req.files);  // Check if files are uploaded
+        console.log('Form data:', req.body);  // Check the form data
+        
+        const paperFiles = req.files['paper'] ? req.files['paper'].map(file => file.path) : [];
+        const journalFiles = req.files['journal'] ? req.files['journal'].map(file => file.path) : [];
+
+        const publicationDate = new Date(req.body.date);
+        if (isNaN(publicationDate)) {
+            return res.status(400).json({ error: 'Invalid date format' });
+        }
+
+        const newPublication = new Publication({
+            papers: paperFiles,
+            journals: journalFiles,
+            publicationDate
+        });
+
+        await newPublication.save();
+
+        res.status(201).json({ message: 'Publication saved successfully' });
+    } catch (error) {
+        console.error('Error saving publication:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 app.listen(5000,()=>{
     console.log(`port connected${5000}`);
 
 
-});
-
+}); 

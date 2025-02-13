@@ -1,209 +1,251 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPES Faculty Dashboard</title>
+    <title>Document</title>
     <style>
-
-body {
-            font-family: Arial, sans-serif;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color:#1693A5;
             margin: 0;
-            padding: 0;
-        }
-        header {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #f8f9fa;
-}
-
-.logo {
-    width: 120px; 
-    height: auto;
-}
-
-        /* The left side navigation menu */
-        .left-sidebar {
-            margin: 0;
-            padding: 0;
-            width: 200px;
-            background-color: #f1f1f1;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-            top: 0;
-            left: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 30vh;
         }
 
-        /* Sidebar links */
-        .left-sidebar a {
-            display: block;
-            color: black;
-            padding: 16px;
-            text-decoration: none;
+        .container {
+            width: 550px;
+            max-width: 750px;
+            background-color: #fff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
         }
 
-        /* Active/current link */
-        .left-sidebar a.active {
-            background-color: #3e3cb8;
-            color: white;
-        }
-
-        /* Links on mouse-over */
-        .left-sidebar a:hover:not(.active) {
-            background-color: #0a0b0c;
-            color: white;
-        }
-
-        /* The right side navigation menu */
-        .right-sidebar {
-            margin: 0;
-            padding: 0;
-            width: 200px;
-            background-color: #f1f1f1;
-            position: fixed;
-            height: 100%;
-            overflow: auto;
-            top: 0;
-            right: 0;
-        }
-
-        /* Sidebar links */
-        .right-sidebar a {
-            display: block;
-            color: black;
-            padding: 16px;
-            text-decoration: none;
-        }
-
-        /* Active/current link */
-        .right-sidebar a.active {
-            background-color: #3e07be;
-            color: white;
-        }
-
-        /* Links on mouse-over */
-        .right-sidebar a:hover:not(.active) {
-            background-color: #0c0c0ca8;
-            color: white;
-        }
-
-        /* Page content. The value of the margin-left and margin-right properties should match the value of the sidebar's width property */
-        .content {
-            background-image: url("e:\New folder\images\upes img.jpg");
-            background-size: cover; /* Cover the entire background */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Do not repeat the background image */
-
-            margin-left: 200px;
-            margin-right: 200px;
-            padding: 16px;
-            height: 100vh; /* Full height */
-            overflow: auto; /* Enable scrolling if needed */
-        }
-
-        .content h1 {
+        h2 {
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 25px;
+            color: #333;
         }
 
-        /* On screens that are less than 700px wide, make the sidebars into topbars */
-        @media screen and (max-width: 700px) {
-            .left-sidebar, .right-sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="file"],
+        select {
+            width: 90%;
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="file"]:focus,
+        select:focus {
+            border-color: #4CAF50;
+        }
+
+        button {
+            width: 20%;
+            padding: 12px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        input[type="file"] {
+            padding: 8px 0;
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #45a049;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 30%;
+            margin-right: 10px;
+        }
+
+        .col:last-child {
+            margin-right: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
             }
-            .left-sidebar a, .right-sidebar a {
-                float: left;
+
+            .row {
+                flex-direction: column;
             }
-            .content {
-                margin-left: 0;
+
+            .col {
+                min-width: 100%;
                 margin-right: 0;
+                margin-bottom: 20px;
             }
         }
-
-        /* On screens that are less than 400px, display the bars vertically, instead of horizontally */
-        @media screen and (max-width: 400px) {
-            .left-sidebar a, .right-sidebar a {
-                text-align: center;
-                float: none;
-            }
-        }
-    
-
     </style>
 </head>
+
 <body>
-    <!-- The left sidebar -->
-    <div class="left-sidebar">
-        <a class="active" href="#scholar-profile" onclick="showContent('scholar-profile')">Scholar Profile</a>
+    <div class="container">
+        <form id="programdetails">
+            <img src="/images/logo.png" alt="Logo" class="logo">
+<div class="row">
+           <h1> Program Details</h1>
+           </div>
+           
+            <!-- Row with Student ID, Session, and Year -->
+            <div class="row">
+                <div class="col">
+                    <label for="studentId">Student ID:</label>
+                    <input type="text" id="studentId" name="studentId" placeholder="Enter Student ID">
+                </div>
+                <div class="col">
+                    <label for="session">Session:</label>
+                    <select id="session" name="session">
+                        <option value="january">January</option>
+                        <option value="july">July</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="year">Year:</label>
+                    <select id="year" name="year">
+                        <script>
+                            for (let i = 2010; i <= 2026; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+            </div>
 
-<img id="profileImage" src="/images/images.png" width="120px" alt="Profile Image" 
-     onerror="this.onerror=null; this.src='path/to/default-image.jpg';">
-<input type="file" id="imageInput" accept="image/*">
-<a href="#status"  onclick="showContent('Status' )">Status</a>  
-          <!-- <a href="#image"  onclick="showContent('Image' )">Image</a>  ---->
-             <a href="#Basicinformation"  onclick="showContent('Basic Information' )">Basic  Information</a>  
-               <a href="#academicdetails"  onclick="showContent('academicdetails' )">Academic Details</a>  
-                 <a href="#Guardiandetails"  onclick="showContent('guardiansdetails' )">Guardians Details</a>  
-                   <a href="#Documentupload"  onclick="showContent'documentupload' )">Document Upload</a>  
+         
 
+            <!-- Fellowship Status, Date of Joining, Part-Time/Full-Time -->
+            <div class="row">
+                <div class="col">
+                    <label for="fellowship">Fellowship Status:</label>
+                    <select id="fellowship" name="fellowship">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="dateOfJoining">Date of Joining:</label>
+                    <input type="date" id="dateOfJoining" name="dateOfJoining">
+                </div>
+                <div class="col">
+                    <label for="partTimeFullTime">Part-Time/Full-Time:</label>
+                    <select id="partTimeFullTime" name="partTimeFullTime">
+                        <option value="part-time">Part-Time</option>
+                        <option value="full-time">Full-Time</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Program Name, School Name, Supervisor -->
+            <div class="row">
+                <div class="col">
+                    <label for="programName">Program Name:</label>
+                    <select id="programName" name="programName">
+                        <!-- Program Name Options -->
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="schoolName">School Name:</label>
+                    <select id="schoolName" name="schoolName">
+                        <!-- School Name Options -->
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="supervisor">Supervisor:</label>
+                    <input type="text" id="supervisor" name="supervisor" placeholder="Supervisor Name">
+                </div>
+            </div>
+
+            <!-- Scholar Stage, SRC/DRC, Examination -->
+            <div class="row">
+                <div class="col">
+                    <label for="scholarStage">Stage of Scholar:</label>
+                    <select id="scholarStage" name="scholarStage">
+                        <option value="coursework">Course Work</option>
+                        <option value="synopsis">Synopsis</option>
+                        <option value="abstract">Abstract</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="srcDrc">SRC/DRC:</label>
+                    <select id="srcDrc" name="srcDrc">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="examination">Examination:</label>
+                    <select id="examination" name="examination">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" id="submitButton">Submit</button>
+            </div>
+        </form>
     </div>
-
-
-    <div class="content">
-        <header> <b><h2>UPES  Faculty Dashboard </h2></b></header>
-         <img src="/images/logo.png" alt="Logo" class="logo">
-        <div id="content-area">
-            <!-- Working area content goes here -->
-        </div>
-    </div>
-
-    <!-- The right sidebar -->
-    <div class="right-sidebar">
-        <a class="active" href="#program-details" onclick="showContent('program-details')">Program Details</a>
-                <a href="#session" onclick="showContent('session ')"> Session</a>
-           <a href="#year" onclick="showContent('year')">Year</a>
-        <a href="#fellowshipstatus" onclick="showContent('fellowshipstatus')">Fellowship Status</a>
-        <a href="#Date of Joining" onclick="showContent('dateofjoining')">Date of Joining</a>
-        <a href="#part-time/full-time" onclick="showContent('part-time/full-time')">Part Time/Full Time</a>
-        <a href="#programname" onclick="showContent('programname')">Program Name</a>
-        <a href="#schoolname" onclick="showContent('schoolname')">School Name</a>
-        <a href="#supervisor" onclick="showContent('supervisor')">Supervisor</a>
-        <a href="#stageofscholar" onclick="showContent('stageofscholar')">Stage of Scholar</a>
-        <a href="#courseworkdetail" onclick="showContent('courseworkdetail')">Course Work Detail</a>
-        <a href="#synopsisdetails" onclick="showContent('synposisdetails')">Synposis Details</a>
-        <a href="#abstractdetails" onclick="showContent('abstractdetails')">Abstract Details</a>
-        <a href="#src/drc" onclick="showContent('src/drc')">SRC/Drc</a>
-        <a href="#examination" onclick="showContent('examination')">Examination</a>
-        
-
-    </div>
-
-    <script>
-        function showContent(section) {
-            const contentArea = document.getElementById('content-area');
-            contentArea.innerHTML = '<p>Loading ' + section.replace('-', ' ') + '...</p>';
-            // Simulate content loading with a timeout
-            setTimeout(() => {
-                contentArea.innerHTML = '<p>Content for ' + section.replace('-', ' ') + '</p>';
-            }, 1000);
-        }
-
-        document.getElementById('imageInput').addEventListener('change', function(event) {
-    const file = event.target.files[0]; 
-    if (file) {
-        const reader = new FileReader(); 
-        reader.onload = function(e) {
-            document.getElementById('profileImage').src = e.target.result; 
-        }
-        reader.readAsDataURL(file); 
-    }
-});
-
-
-    </script>
+    <script src="/script/programdetail2.js"></script>
 </body>
+
 </html>
